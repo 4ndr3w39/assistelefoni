@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_app/main.dart';
 import 'package:my_app/misc/clippers/oval_top_border_clipper.dart';
 import 'package:my_app/pages/loginPage.dart';
+import 'package:my_app/pages/registerPage.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({Key? key}) : super(key: key);
@@ -134,7 +135,7 @@ class ButtonWelcomePage extends StatelessWidget {
               //   ),
               // )
               MaterialPageRoute(
-                builder: (context) => const FirstRoute(),
+                builder: (context) => const RegisterPage(),
               ),
             );
           },
