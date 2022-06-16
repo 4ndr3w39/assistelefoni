@@ -62,6 +62,7 @@ class _MainPageState extends State<MainPage> {
     // than having to individually change instances of widgets.
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.amber[800],
         title: const Text('Assistelefoni'),
         // Here we take the value from the MainPage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -107,7 +108,7 @@ class _MainPageState extends State<MainPage> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         selectedItemColor: Colors.amber[800],
-        unselectedItemColor: Colors.blue,
+        unselectedItemColor: Colors.red[300],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,
         items: const <BottomNavigationBarItem>[
@@ -140,6 +141,7 @@ class _MainPageState extends State<MainPage> {
                 );
               },
               child: const Icon(Icons.add),
+              backgroundColor: Colors.amber[800],
             )
           : null,
     );

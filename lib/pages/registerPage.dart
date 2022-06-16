@@ -34,11 +34,12 @@ class RegisterPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 Align(
-                    alignment: Alignment.topCenter,
-                    child: Image.asset(
-                      'assets/images/register.jpg',
-                      width: 100,
-                    )),
+                  alignment: Alignment.topCenter,
+                  child: Image.asset(
+                    'assets/images/register.jpg',
+                    width: 100,
+                  ),
+                ),
                 const Spacer(),
               ],
             ),
