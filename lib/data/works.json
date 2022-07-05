@@ -1,0 +1,39 @@
+{
+  "lavori": [
+    {
+      "imei": "24234523423",
+      "serial": "N7O79",
+      "marca": "Apple",
+      "modello": "iPhone 7",
+      "note": "03/08/1992"
+    },
+    {
+      "imei": "364574682",
+      "serial": "C4Y4C6C54",
+      "marca": "Samsung",
+      "modello": "S6",
+      "note": "03/08/1992"
+    },
+    {
+      "imei": "367456846y34t",
+      "serial": "C45Y456U64C4",
+      "marca": "Apple",
+      "modello": "iPhone XS",
+      "note": "03/08/1992"
+    },
+    {
+      "imei": "23634635645",
+      "serial": "C45CUV57C5YX4",
+      "marca": "Nokia",
+      "modello": "N95",
+      "note": "03/08/1992"
+    },
+    {
+      "imei": "68563663",
+      "serial": "C3Y56U5VX",
+      "marca": "Huawei",
+      "modello": "P30Pro",
+      "note": "03/08/1992"
+    }
+  ]
+}

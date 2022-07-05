@@ -31,6 +31,7 @@ getCurrentDate() {
 class _CharacterListState extends State<Home> {
   var hour = DateTime.now().hour;
   var time = DateTime.now().hour;
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,6 +55,15 @@ class _CharacterListState extends State<Home> {
             style: TextStyle(
                 color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20),
           ),
+          // Row(
+          //   children: <Widget>[
+          //     ElevatedButton(
+          //         onPressed: () {
+          //           addNuovoLavoro();
+          //         },
+          //         child: const Text('write'))
+          //   ],
+          // ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[

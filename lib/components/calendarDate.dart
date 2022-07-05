@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CalendarDate extends StatelessWidget {
   final String currentDate;
-  CalendarDate(this.currentDate, {Key? key}) : super(key: key);
+  const CalendarDate(this.currentDate, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,13 +23,13 @@ class CalendarDate extends StatelessWidget {
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 30, top: 16),
+            padding: const EdgeInsets.only(left: 30, top: 10),
             child: Text(
               currentDate,
               style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
-                  fontSize: 22),
+                  fontSize: 18),
             ),
           )
         ],

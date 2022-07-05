@@ -4,8 +4,14 @@ import 'package:my_app/routes/home.dart';
 import 'package:my_app/routes/listaContatti.dart';
 import 'package:my_app/routes/listaLavori.dart';
 import 'package:my_app/routes/nuovaAssistenza.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -136,7 +142,13 @@ class _MainPageState extends State<MainPage> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => const NuovaAssistenza(),
+                    builder: (context) => NuovaAssistenza(
+                      imei: '',
+                      marca: '',
+                      modello: '',
+                      note: '',
+                      serial: '',
+                    ),
                   ),
                 );
               },

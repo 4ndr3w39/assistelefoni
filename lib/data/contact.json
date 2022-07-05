@@ -1,0 +1,16 @@
+{
+  "clienti": [
+    {
+      "nome": "Andrea",
+      "cognome": "Delussu",
+      "id": "1",
+      "dataNascita": "03/08/1992"
+    },
+    {
+      "nome": "Igor",
+      "cognome": "Martis",
+      "id": "2",
+      "dataNascita": "11/08/1980"
+    }
+  ]
+}

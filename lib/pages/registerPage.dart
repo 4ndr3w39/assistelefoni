@@ -44,7 +44,7 @@ class RegisterPage extends StatelessWidget {
               ],
             ),
           ),
-          Container(
+          SizedBox(
             height: MediaQuery.of(context).size.height / 1.6,
             width: MediaQuery.of(context).size.width,
             child: Column(

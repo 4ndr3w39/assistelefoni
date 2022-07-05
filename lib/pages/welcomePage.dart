@@ -1,6 +1,4 @@
-import 'package:flutter/widgets.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/main.dart';
 import 'package:my_app/misc/clippers/oval_top_border_clipper.dart';
 import 'package:my_app/pages/loginPage.dart';
 import 'package:my_app/pages/registerPage.dart';
@@ -88,25 +86,26 @@ class ButtonWelcomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     if (logIn) {
       return ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            primary: Colors.amber[800],
-            padding: const EdgeInsets.symmetric(
-              vertical: 16,
-              horizontal: 34,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(100),
-            ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.amber[800],
+          padding: const EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 34,
           ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const LoginPage(),
-              ),
-            );
-          },
-          child: Text(title));
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const LoginPage(),
+            ),
+          );
+        },
+        child: Text(title),
+      );
     } else {
       return Container(
         margin: const EdgeInsets.only(top: 20),
