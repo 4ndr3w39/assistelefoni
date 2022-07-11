@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/app.dart';
 import 'package:my_app/routes/home.dart';
@@ -6,17 +7,21 @@ import 'package:my_app/routes/listaLavori.dart';
 import 'package:my_app/routes/nuovaAssistenza.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
+import 'package:my_app/firebase_options.dart';
+import 'package:my_app/pages/welcomePage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MainPage extends StatefulWidget {
-  const MainPage({Key? key}) : super(key: key);
+  final User user;
+
+  const MainPage({required this.user});
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -31,21 +36,22 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class FirstRoute extends StatelessWidget {
-  const FirstRoute({Key? key}) : super(key: key);
+// class FirstRoute extends StatelessWidget {
+//   FirstRoute({Key? key}) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return const MainPage();
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return const MainPage();
+//   }
+// }
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
+  late final User user;
 
   // TODO perchè final?
   final screens = [
-    const Home(),
+    Home(),
     const ListaContatti(),
     const ListaLavori(),
   ];
@@ -67,12 +73,12 @@ class _MainPageState extends State<MainPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber[800],
-        title: const Text('Assistelefoni'),
-        // Here we take the value from the MainPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-      ),
+      // appBar: AppBar(
+      //   backgroundColor: Colors.amber[800],
+      //   title: const Text('Assistelefoni'),
+      //   // Here we take the value from the MainPage object that was created by
+      //   // the App.build method, and use it to set our appbar title.
+      // ),
       body: screens[_selectedIndex],
       // Container(
       //   padding: const EdgeInsets.all(30.0),
@@ -159,3 +165,37 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
+
+
+
+
+// class MyApp extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return MaterialApp(
+//       title: 'Flutter Authentication',
+//       debugShowCheckedModeBanner: false,
+//       theme: ThemeData(
+//         brightness: Brightness.light,
+//         primarySwatch: Colors.blue,
+//         elevatedButtonTheme: ElevatedButtonThemeData(
+//           style: ElevatedButton.styleFrom(
+//             textStyle: TextStyle(
+//               fontSize: 24.0,
+//             ),
+//             padding: EdgeInsets.fromLTRB(16.0, 8.0, 16.0, 8.0),
+//           ),
+//         ),
+//         textTheme: TextTheme(
+//           headline1: TextStyle(
+//             fontSize: 46.0,
+//             color: Colors.blue.shade700,
+//             fontWeight: FontWeight.w500,
+//           ),
+//           bodyText1: TextStyle(fontSize: 18.0),
+//         ),
+//       ),
+//       home: WelcomePage(),
+//     );
+//   }
+// }

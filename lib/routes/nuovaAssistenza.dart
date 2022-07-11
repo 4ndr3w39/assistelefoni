@@ -128,6 +128,7 @@ class MyCustomFormState extends State<MyCustomForm> {
               child: ListView.builder(
                 padding: const EdgeInsets.only(top: 20),
                 shrinkWrap: true,
+                itemCount: 1,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(
                     children: [

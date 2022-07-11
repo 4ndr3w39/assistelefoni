@@ -17,6 +17,11 @@ class _CharacterListState extends State<ListaContatti> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber[800],
+        title: Text('Lista Contatti'),
+        automaticallyImplyLeading: false,
+      ),
       // appBar: AppBar(
       //   title: const Text('Lista Contatti'),
       // ),

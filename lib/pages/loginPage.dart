@@ -138,12 +138,12 @@ class LoginPage extends StatelessWidget {
             const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
       ),
       onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const MainPage(),
-          ),
-        );
+        // Navigator.push(
+        //   context,
+        //   MaterialPageRoute(
+        //     builder: (context) => const MainPage(),
+        //   ),
+        // );
       },
     );
   }

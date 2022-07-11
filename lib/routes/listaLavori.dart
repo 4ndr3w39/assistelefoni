@@ -3,83 +3,101 @@ import 'dart:convert';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ListaLavori extends StatefulWidget {
   const ListaLavori({Key? key}) : super(key: key);
-
   @override
   _CharacterListState createState() => _CharacterListState();
 }
 
+//context.estimatedChildCount
 class _CharacterListState extends State<ListaLavori> {
   DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
   late DatabaseReference databaseReference;
   @override
   Widget build(BuildContext context) {
-    return FirebaseAnimatedList(
-      query: ref,
-      shrinkWrap: true,
-      defaultChild: const Center(
-        child: CircularProgressIndicator(
-          color: Colors.amber,
-        ),
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber[800],
+        title: Text('Lista Lavori'),
+        automaticallyImplyLeading: false,
       ),
-      itemBuilder: (BuildContext context, DataSnapshot snapshot,
-          Animation animation, int index) {
-        if (!snapshot.exists) {
-          return const Center(child: Text(' NO DATA'));
-        } else {
-          return Stack(
-            children: <Widget>[
-              Positioned(
-                right: 10.0,
-                top: 10,
-                child: Container(
-                  width: 130.0,
-                  height: 30.0,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.rectangle,
-                    color: Color.fromARGB(255, 255, 143, 0),
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10.0),
-                      topRight: Radius.circular(10.0),
+      body: FirebaseAnimatedList(
+        query: ref,
+        shrinkWrap: true,
+        defaultChild: const Center(
+          child: CircularProgressIndicator(
+            color: Colors.amber,
+          ),
+        ),
+        itemBuilder: (BuildContext context, DataSnapshot snapshot,
+            Animation animation, int index) {
+          if (!snapshot.exists) {
+            return const Center(child: Text(' NO DATA'));
+          } else {
+            return Stack(
+              children: <Widget>[
+                Positioned(
+                  right: 10.0,
+                  top: 15,
+                  child: Container(
+                    width: 110.0,
+                    height: 20.0,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: Color.fromARGB(255, 255, 143, 0),
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
                     ),
-                  ),
-                  child: Text(
-                    (snapshot.value! as Map)['id'].toString().toUpperCase(),
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ),
-              ),
-              Card(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
-                  ),
-                ),
-                elevation: 2,
-                margin: const EdgeInsets.only(top: 35, right: 10, left: 10),
-                child: Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Theme(
-                    data: Theme.of(context)
-                        .copyWith(dividerColor: Colors.transparent),
-                    child: ExpansionTile(
-                      backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
-                      title: _buildTitle(snapshot),
-                      trailing: const SizedBox(),
-                      children: <Widget>[
-                        _bodyDetail(snapshot),
-                      ],
+                    child: Text(
+                      (snapshot.value! as Map)['id'].toString().toUpperCase(),
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
                     ),
                   ),
                 ),
-              ),
-            ],
-          );
-        }
-      },
+                Card(
+                  shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10.0),
+                          bottomLeft: Radius.circular(10.0),
+                          bottomRight: Radius.circular(10.0))),
+                  elevation: 2,
+                  margin: const EdgeInsets.only(top: 35, right: 10, left: 10),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Theme(
+                      data: Theme.of(context)
+                          .copyWith(dividerColor: Colors.transparent),
+                      child: ExpansionTile(
+                        backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
+                        title: _buildTitle(snapshot),
+                        trailing: const SizedBox(),
+                        children: <Widget>[
+                          _bodyDetail(snapshot),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                    right: 10.0,
+                    top: 30,
+                    child: IconButton(
+                      icon: const Icon(Icons.edit,
+                          color: Color.fromARGB(255, 255, 143, 0)),
+                      onPressed: () {
+                        //  TODO
+                      },
+                    )),
+              ],
+            );
+          }
+        },
+      ),
     );
   }
 
@@ -100,13 +118,14 @@ class _CharacterListState extends State<ListaLavori> {
                 children: <Widget>[
                   Text(
                     (snapshot.value! as Map)['marca'].toString().toUpperCase(),
+                    style: TextStyle(fontSize: 14),
                   ),
                   const SizedBox(width: 10),
                   Text(
-                    (snapshot.value! as Map)['modello']
-                        .toString()
-                        .toUpperCase(),
-                  ),
+                      (snapshot.value! as Map)['modello']
+                          .toString()
+                          .toUpperCase(),
+                      style: TextStyle(fontSize: 14)),
                 ],
               )
             ],
@@ -267,7 +286,33 @@ class _CharacterListState extends State<ListaLavori> {
                 )
               ],
             ),
-          )
+          ),
+          // ElevatedButton(
+          //   child: const Text('Show Modal Bottom Sheet'),
+          //   onPressed: () {
+          //     showModalBottomSheet(
+          //       context: context,
+          //       builder: (context) {
+          //         return Wrap(
+          //           children: const <Widget>[
+          //             ListTile(
+          //               leading: Icon(Icons.share),
+          //               title: Text('Share'),
+          //             ),
+          //             ListTile(
+          //               leading: Icon(Icons.copy),
+          //               title: Text('Copy Link'),
+          //             ),
+          //             ListTile(
+          //               leading: Icon(Icons.edit),
+          //               title: Text('Edit'),
+          //             ),
+          //           ],
+          //         );
+          //       },
+          //     );
+          //   },
+          // ),
         ],
       ),
     );
