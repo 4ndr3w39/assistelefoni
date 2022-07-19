@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:my_app/modal/modalUpdate.dart';
 
 class ListaLavori extends StatefulWidget {
   const ListaLavori({Key? key}) : super(key: key);
@@ -11,16 +11,31 @@ class ListaLavori extends StatefulWidget {
   _CharacterListState createState() => _CharacterListState();
 }
 
-//context.estimatedChildCount
 class _CharacterListState extends State<ListaLavori> {
   DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
   late DatabaseReference databaseReference;
+
+  // createQuery() async {
+  //   var ref;
+  //   if (query == '') {
+  //     DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
+  //     late DatabaseReference databaseReference;
+  //   } else {
+  //     Query ref = FirebaseDatabase.instance
+  //         .ref("lavori")
+  //         .orderByChild('status')
+  //         .equalTo(query);
+  //     late DatabaseReference databaseReference;
+  //   }
+  //   return ref;
+  // }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[800],
-        title: Text('Lista Lavori'),
+        title: const Text('Lista Lavori'),
         automaticallyImplyLeading: false,
       ),
       body: FirebaseAnimatedList(
@@ -39,32 +54,71 @@ class _CharacterListState extends State<ListaLavori> {
             return Stack(
               children: <Widget>[
                 Positioned(
-                  right: 10.0,
+                  left: 10.0,
                   top: 15,
                   child: Container(
-                    width: 110.0,
                     height: 20.0,
                     alignment: Alignment.center,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color: Color.fromARGB(255, 255, 143, 0),
-                      borderRadius: BorderRadius.only(
+                      color:
+                          (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
+                              ? Colors.red
+                              : const Color.fromARGB(255, 255, 143, 0),
+                      borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10.0),
                         topRight: Radius.circular(10.0),
                       ),
                     ),
-                    child: Text(
-                      (snapshot.value! as Map)['id'].toString().toUpperCase(),
-                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        (snapshot.value! as Map)['id'].toString().toUpperCase(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 10.0,
+                  top: 15,
+                  child: Container(
+                    height: 20.0,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color:
+                          (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
+                              ? Colors.red
+                              : const Color.fromARGB(255, 255, 143, 0),
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        (snapshot.value! as Map)['status']
+                            .toString()
+                            .toUpperCase(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
                     ),
                   ),
                 ),
                 Card(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(10.0),
-                          bottomLeft: Radius.circular(10.0),
-                          bottomRight: Radius.circular(10.0))),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(10.0),
+                      bottomRight: Radius.circular(10.0),
+                    ),
+                    side: (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
+                        ? const BorderSide(color: Colors.red, width: 2.0)
+                        : BorderSide.none,
+                  ),
                   elevation: 2,
                   margin: const EdgeInsets.only(top: 35, right: 10, left: 10),
                   child: Padding(
@@ -73,6 +127,7 @@ class _CharacterListState extends State<ListaLavori> {
                       data: Theme.of(context)
                           .copyWith(dividerColor: Colors.transparent),
                       child: ExpansionTile(
+                        tilePadding: EdgeInsets.zero,
                         backgroundColor: const Color.fromRGBO(255, 255, 255, 1),
                         title: _buildTitle(snapshot),
                         trailing: const SizedBox(),
@@ -84,14 +139,126 @@ class _CharacterListState extends State<ListaLavori> {
                   ),
                 ),
                 Positioned(
+                  right: 130.0,
+                  top: 30,
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 25,
+                        child: Column(
+                          children: [
+                            ((snapshot.value! as Map)['acqua'] == null ||
+                                    (snapshot.value! as Map)['acqua'] == false)
+                                ? IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.water_drop_rounded,
+                                      size: 20,
+                                      color: Color.fromARGB(255, 195, 210, 238),
+                                    ),
+                                  )
+                                : IconButton(
+                                    iconSize: 20,
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.water_drop_rounded,
+                                      color: Color.fromARGB(255, 18, 101, 234),
+                                    ),
+                                    tooltip: 'Danno da liquido',
+                                  )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 25,
+                        child: Column(
+                          children: [
+                            ((snapshot.value! as Map)['garanzia'] == null ||
+                                    (snapshot.value! as Map)['garanzia'] ==
+                                        false)
+                                ? const Icon(
+                                    Icons.warning_rounded,
+                                    size: 20,
+                                    color: Color.fromARGB(255, 195, 210, 238),
+                                  )
+                                : IconButton(
+                                    iconSize: 20,
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.warning_rounded,
+                                      color: Color.fromARGB(255, 18, 101, 234),
+                                    ),
+                                    tooltip: 'In garanzia',
+                                  )
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        width: 20,
+                        child: Column(
+                          children: [
+                            ((snapshot.value! as Map)['garanzia'] == null ||
+                                    (snapshot.value! as Map)['garanzia'] ==
+                                        false)
+                                ? const Icon(
+                                    Icons.image_rounded,
+                                    size: 20,
+                                    color: Color.fromARGB(255, 195, 210, 238),
+                                  )
+                                : IconButton(
+                                    iconSize: 20,
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.image_rounded,
+                                      color: Color.fromARGB(255, 18, 101, 234),
+                                    ),
+                                    tooltip: 'Foto allegate',
+                                  )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Positioned(
                     right: 10.0,
-                    top: 30,
-                    child: IconButton(
-                      icon: const Icon(Icons.edit,
-                          color: Color.fromARGB(255, 255, 143, 0)),
-                      onPressed: () {
-                        //  TODO
-                      },
+                    top: 40,
+                    child: Column(
+                      children: <Widget>[
+                        SizedBox(
+                          height: 15,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: const Icon(
+                              Icons.edit,
+                              color: Color.fromARGB(255, 255, 143, 0),
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              updateDatajobs((snapshot.value! as Map)['status'],
+                                  context, snapshot.key, ref);
+                            },
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        SizedBox(
+                          height: 15,
+                          child: IconButton(
+                            padding: EdgeInsets.zero,
+                            icon: const Icon(
+                              Icons.perm_device_info_outlined,
+                              color: Color.fromARGB(255, 255, 143, 0),
+                              size: 20,
+                            ),
+                            onPressed: () {
+                              updateDatajobs((snapshot.value! as Map)['status'],
+                                  context, snapshot.key, ref);
+                            },
+                          ),
+                        ),
+                      ],
                     )),
               ],
             );
@@ -102,12 +269,12 @@ class _CharacterListState extends State<ListaLavori> {
   }
 
   Widget _buildTitle(snapshot) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: <Widget>[
-        SizedBox(
-          width: 200,
-          child: Column(
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               const Text(
@@ -118,48 +285,35 @@ class _CharacterListState extends State<ListaLavori> {
                 children: <Widget>[
                   Text(
                     (snapshot.value! as Map)['marca'].toString().toUpperCase(),
-                    style: TextStyle(fontSize: 14),
+                    style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(width: 10),
                   Text(
                       (snapshot.value! as Map)['modello']
                           .toString()
                           .toUpperCase(),
-                      style: TextStyle(fontSize: 14)),
+                      style: const TextStyle(fontSize: 14)),
                 ],
               )
             ],
           ),
-        ),
-        SizedBox(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              const Text(
-                "Stato: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              Text(
-                (snapshot.value! as Map)['status'].toString().toUpperCase(),
-              ),
-            ],
-          ),
-        )
-      ],
+        ],
+      ),
     );
   }
 
   Widget _bodyDetail(snapshot) {
     return Padding(
-      padding: const EdgeInsets.all(4.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Column(
         children: <Widget>[
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               SizedBox(
                 width: 150,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "Imei: ",
@@ -174,6 +328,7 @@ class _CharacterListState extends State<ListaLavori> {
               SizedBox(
                 width: 150,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
                       "serial: ",
@@ -188,86 +343,6 @@ class _CharacterListState extends State<ListaLavori> {
                 ),
               )
             ],
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  width: 150,
-                  child: Column(
-                    children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 5),
-                        child: Text(
-                          "Acqua: ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          ((snapshot.value! as Map)['acqua'] == null ||
-                                  (snapshot.value! as Map)['acqua'] == false)
-                              ? SizedBox(
-                                  height: 15,
-                                  width: 10.0,
-                                  child: Checkbox(
-                                    tristate: false,
-                                    onChanged: (value) {},
-                                    value: false,
-                                  ),
-                                )
-                              : SizedBox(
-                                  height: 15,
-                                  width: 10.0,
-                                  child: Checkbox(
-                                    tristate: true,
-                                    onChanged: (value) {},
-                                    value: true,
-                                  ),
-                                ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: 150,
-                  child: Column(
-                    children: <Widget>[
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 5),
-                        child: Text(
-                          "Garanzia: ",
-                          style: TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                      ),
-                      ((snapshot.value! as Map)['garanzia'] == null ||
-                              (snapshot.value! as Map)['garanzia'] == false)
-                          ? SizedBox(
-                              height: 15,
-                              width: 10.0,
-                              child: Checkbox(
-                                tristate: false,
-                                onChanged: (value) {},
-                                value: false,
-                              ),
-                            )
-                          : SizedBox(
-                              height: 15,
-                              width: 10.0,
-                              child: Checkbox(
-                                tristate: true,
-                                onChanged: (value) {},
-                                value: true,
-                              ),
-                            )
-                    ],
-                  ),
-                )
-              ],
-            ),
           ),
           Padding(
             padding: const EdgeInsets.only(top: 10),
@@ -317,4 +392,9 @@ class _CharacterListState extends State<ListaLavori> {
       ),
     );
   }
+
+  // updateData(String status, var key) {
+  //   Map<String, String> data = {"status": status};
+  //   ref.child(key).update(data);
+  // }
 }

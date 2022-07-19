@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:my_app/pages/detailPage.dart';
 
 import '../classes/contatto.dart';
 
@@ -19,7 +20,7 @@ class _CharacterListState extends State<ListaContatti> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[800],
-        title: Text('Lista Contatti'),
+        title: const Text('Lista Contatti'),
         automaticallyImplyLeading: false,
       ),
       // appBar: AppBar(
@@ -74,50 +75,54 @@ class ContactsList extends StatelessWidget {
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1,
-        mainAxisExtent: 110,
+        mainAxisExtent: 80,
       ),
       itemCount: contacts.length,
       itemBuilder: (context, index) {
-        return SizedBox(
-          child: Card(
-            elevation: 2,
-            margin: const EdgeInsets.all(5),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              // mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  // leading: Icon(Icons.album),
-                  leading: CircleAvatar(
-                    radius: 30.0,
-                    backgroundImage: NetworkImage(contacts[index].thumbnailUrl),
-                    backgroundColor: Colors.transparent,
-                  ),
-                  title: Text(contacts[index].title),
-                  // subtitle: Text(contacts[index].birthday),
-                  trailing: TextButton(
-                    child: const Text('Vedi'),
-                    onPressed: () {/* ... */},
-                  ),
-                  // trailing: Text(contacts[index].nickname),
+        return Card(
+          elevation: 2,
+          margin: const EdgeInsets.all(8),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                // leading: Icon(Icons.album),
+                leading: CircleAvatar(
+                  radius: 20.0,
+                  backgroundImage: NetworkImage(contacts[index].thumbnailUrl),
+                  backgroundColor: Colors.transparent,
                 ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.end,
-                //   children: <Widget>[
-                //     TextButton(
-                //       child: const Text('BUY TICKETS'),
-                //       onPressed: () {/* ... */},
-                //     ),
-                //     const SizedBox(width: 8),
-                //     TextButton(
-                //       child: const Text('LISTEN'),
-                //       onPressed: () {/* ... */},
-                //     ),
-                //     const SizedBox(width: 8),
-                //   ],
-                // ),
-              ],
-            ),
+                title: Text(contacts[index].name),
+                // subtitle: Text(contacts[index].birthday),
+                trailing: TextButton(
+                  child: const Text('Vedi'),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                DetailPage(contact: contacts[index])));
+                  },
+                ),
+                // trailing: Text(contacts[index].nickname),
+              ),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.end,
+              //   children: <Widget>[
+              //     TextButton(
+              //       child: const Text('BUY TICKETS'),
+              //       onPressed: () {/* ... */},
+              //     ),
+              //     const SizedBox(width: 8),
+              //     TextButton(
+              //       child: const Text('LISTEN'),
+              //       onPressed: () {/* ... */},
+              //     ),
+              //     const SizedBox(width: 8),
+              //   ],
+              // ),
+            ],
           ),
         );
       },

@@ -5,16 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class NuovaAssistenza extends StatelessWidget {
+class NuovaAssistenza extends StatefulWidget {
   String marca, modello, imei, serial, note;
 
   NuovaAssistenza(
-      {required this.imei,
+      {Key? key,
+      required this.imei,
       required this.marca,
       required this.modello,
       required this.note,
-      required this.serial});
+      required this.serial})
+      : super(key: key);
 
+  @override
+  State<NuovaAssistenza> createState() => _NuovaAssistenzaState();
+}
+
+class _NuovaAssistenzaState extends State<NuovaAssistenza> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,12 +121,6 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey created above.
 
     return Scaffold(
-      //TODO ARROW FOR GET DOWN ON SUBMIT
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {},
-      //   child: const Icon(Icons.arrow_circle_down),
-      //   backgroundColor: Colors.amber[800],
-      // ),
       body: SizedBox(
         height: 1500,
         child: Expanded(

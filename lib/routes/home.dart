@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/components/calendarDate.dart';
-import 'package:my_app/pages/login_page_new.dart';
 import 'package:my_app/pages/profile_page.dart';
 import 'dart:math' as math;
 
 import 'package:my_app/pages/welcomePage.dart';
+import 'package:my_app/routes/lastJobs.dart';
+import 'package:my_app/routes/listaLavori.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -38,10 +38,28 @@ getCurrentDate() {
 class _CharacterListState extends State<Home> {
   bool _isSendingVerification = false;
   bool _isSigningOut = false;
-
+  // DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
   final FirebaseAuth auth = FirebaseAuth.instance;
 
-  inputData() {
+  // countLavoriNuovi() async {
+  //   Query ref = FirebaseDatabase.instance
+  //       .ref("lavori")
+  //       .orderByChild('status')
+  //       .equalTo("Nuova");
+
+  //   var snapshot = await ref.get();
+  //   var resutl = snapshot.children.length;
+  //   print(resutl);
+  //   return resutl;
+  // }
+
+  @override
+  void initState() {
+    // countLavoriNuovi();
+    super.initState();
+  }
+
+  getUser() {
     final User? user = auth.currentUser;
     return user;
   }
@@ -54,7 +72,7 @@ class _CharacterListState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[800],
-        title: Text('Home'),
+        title: const Text('Home'),
         leading: Transform.rotate(
           angle: 180 * math.pi / 180,
           child: IconButton(
@@ -68,11 +86,11 @@ class _CharacterListState extends State<Home> {
               });
               Navigator.of(context).pushReplacement(
                 MaterialPageRoute(
-                  builder: (context) => WelcomePage(),
+                  builder: (context) => const WelcomePage(),
                 ),
               );
             },
-            icon: Icon(Icons.logout_outlined),
+            icon: const Icon(Icons.logout_outlined),
           ),
         ),
         //TODO
@@ -86,7 +104,7 @@ class _CharacterListState extends State<Home> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProfilePage(user: inputData()),
+                  builder: (context) => ProfilePage(user: getUser()),
                 ),
               );
             },
@@ -109,7 +127,7 @@ class _CharacterListState extends State<Home> {
                     fontSize: 20),
               ),
             ),
-            Text(
+            const Text(
               'Andrea',
               style: TextStyle(
                   color: Colors.black,
@@ -164,8 +182,8 @@ class _CharacterListState extends State<Home> {
                           color: Colors.red,
                         ),
                         child: const Text(
-                          '5',
-                          style: TextStyle(
+                          '8',
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                           ),
@@ -220,28 +238,26 @@ class _CharacterListState extends State<Home> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(15.0),
                     ),
-                    child: SizedBox(
-                      width: 150,
-                      height: 200,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        // mainAxisSize: MainAxisSize.min,
-                        children: const <Widget>[
-                          Padding(
-                            padding: EdgeInsets.all(13),
-                            child: Text(
-                              'Da consegnare',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 18),
-                            ),
+                    // child: SizedBox(width: 150, height: 200, child: LastJobs()
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      // mainAxisSize: MainAxisSize.min,
+                      children: const <Widget>[
+                        Padding(
+                          padding: EdgeInsets.all(13),
+                          child: Text(
+                            'Da consegnare',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
+                    // ),
                   ),
                 )
               ],

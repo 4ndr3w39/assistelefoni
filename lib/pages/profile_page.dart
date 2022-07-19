@@ -34,33 +34,103 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'NAME: ${_currentUser.displayName}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            SizedBox(height: 16.0),
-            Text(
-              'EMAIL: ${_currentUser.email}',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            SizedBox(height: 16.0),
-            _currentUser.emailVerified
-                ? Text(
-                    'Email verified',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.green),
-                  )
-                : Text(
-                    'Email not verified',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.red),
+            Padding(
+              padding: const EdgeInsets.only(top: 20.0),
+              child: Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 75,
+                    backgroundColor: Colors.grey.shade200,
+                    child: CircleAvatar(
+                      radius: 70,
+                      backgroundImage: AssetImage('assets/images/default.png'),
+                    ),
                   ),
+                  Positioned(
+                    bottom: 1,
+                    right: 1,
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Icon(Icons.add_a_photo, color: Colors.black),
+                      ),
+                      decoration: BoxDecoration(
+                          border: Border.all(
+                            width: 3,
+                            color: Colors.white,
+                          ),
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              50,
+                            ),
+                          ),
+                          color: Colors.white,
+                          boxShadow: [
+                            BoxShadow(
+                              offset: Offset(2, 4),
+                              color: Colors.black.withOpacity(
+                                0.3,
+                              ),
+                              blurRadius: 3,
+                            ),
+                          ]),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.all(20.0),
+              child: Table(
+                children: [
+                  TableRow(children: [
+                    const Text('Nome'),
+                    Text('${_currentUser.displayName}'),
+                  ]),
+                  const TableRow(children: [
+                    Text('Ruolo'),
+                    Text('//////'),
+                  ]),
+                  TableRow(children: [
+                    const Text('Email'),
+                    Text('${_currentUser.email}'),
+                  ]),
+                  TableRow(
+                    children: [
+                      const Text('Stato Email'),
+                      _currentUser.emailVerified
+                          ? Text(
+                              'Email verified',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(color: Colors.green),
+                            )
+                          : Text(
+                              'Email not verified',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(color: Colors.red),
+                            ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            // Text(
+            //   'NAME: ${_currentUser.displayName}',
+            //   style: Theme.of(context).textTheme.bodyText1,
+            // ),
+            // SizedBox(height: 16.0),
+            // Text(
+            //   'EMAIL: ${_currentUser.email}',
+            //   style: Theme.of(context).textTheme.bodyText1,
+            // ),
+            // SizedBox(height: 16.0),
+
             SizedBox(height: 16.0),
             _isSendingVerification
                 ? CircularProgressIndicator()
