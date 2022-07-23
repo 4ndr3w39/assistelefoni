@@ -46,7 +46,9 @@ class DetailPage extends StatelessWidget {
                 ]),
                 TableRow(children: [
                   const Text('Email'),
-                  Text(contact.id.toString()),
+                  Text(
+                    contact.id.toString(),
+                  ),
                 ]),
                 TableRow(
                   children: [

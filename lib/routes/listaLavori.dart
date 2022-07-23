@@ -12,23 +12,7 @@ class ListaLavori extends StatefulWidget {
 }
 
 class _CharacterListState extends State<ListaLavori> {
-  DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
-  late DatabaseReference databaseReference;
-
-  // createQuery() async {
-  //   var ref;
-  //   if (query == '') {
-  //     DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
-  //     late DatabaseReference databaseReference;
-  //   } else {
-  //     Query ref = FirebaseDatabase.instance
-  //         .ref("lavori")
-  //         .orderByChild('status')
-  //         .equalTo(query);
-  //     late DatabaseReference databaseReference;
-  //   }
-  //   return ref;
-  // }
+  DatabaseReference ref = FirebaseDatabase.instance.ref().child("lavori");
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +23,7 @@ class _CharacterListState extends State<ListaLavori> {
         automaticallyImplyLeading: false,
       ),
       body: FirebaseAnimatedList(
-        query: ref,
+        query: ref.orderByChild('data'),
         shrinkWrap: true,
         defaultChild: const Center(
           child: CircularProgressIndicator(
@@ -48,6 +32,19 @@ class _CharacterListState extends State<ListaLavori> {
         ),
         itemBuilder: (BuildContext context, DataSnapshot snapshot,
             Animation animation, int index) {
+          var _statusColor =
+              (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
+                  ? Colors.red
+                  : (snapshot.value! as Map)['status'] == 'CONSEGNATO'
+                      ? Colors.green
+                      : const Color.fromARGB(255, 255, 143, 0);
+          var _borderColor =
+              (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
+                  ? const BorderSide(color: Colors.red, width: 2.0)
+                  : (snapshot.value! as Map)['status'] == 'CONSEGNATO'
+                      ? const BorderSide(color: Colors.green, width: 2.0)
+                      : BorderSide.none;
+
           if (!snapshot.exists) {
             return const Center(child: Text(' NO DATA'));
           } else {
@@ -61,19 +58,42 @@ class _CharacterListState extends State<ListaLavori> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color:
-                          (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
-                              ? Colors.red
-                              : const Color.fromARGB(255, 255, 143, 0),
+                      color: _statusColor,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10.0),
                         topRight: Radius.circular(10.0),
                       ),
                     ),
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       child: Text(
                         (snapshot.value! as Map)['id'].toString().toUpperCase(),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  left: 140.0,
+                  top: 15,
+                  child: Container(
+                    height: 20.0,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      color: _statusColor,
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(10.0),
+                        topRight: Radius.circular(10.0),
+                      ),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
+                      child: Text(
+                        (snapshot.value! as Map)['data']
+                            .toString()
+                            .toUpperCase(),
                         style:
                             const TextStyle(color: Colors.white, fontSize: 12),
                       ),
@@ -88,10 +108,7 @@ class _CharacterListState extends State<ListaLavori> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       shape: BoxShape.rectangle,
-                      color:
-                          (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
-                              ? Colors.red
-                              : const Color.fromARGB(255, 255, 143, 0),
+                      color: _statusColor,
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(10.0),
                         topRight: Radius.circular(10.0),
@@ -115,9 +132,7 @@ class _CharacterListState extends State<ListaLavori> {
                       bottomLeft: Radius.circular(10.0),
                       bottomRight: Radius.circular(10.0),
                     ),
-                    side: (snapshot.value! as Map)['status'] == 'NON RIPARABILE'
-                        ? const BorderSide(color: Colors.red, width: 2.0)
-                        : BorderSide.none,
+                    side: _borderColor,
                   ),
                   elevation: 2,
                   margin: const EdgeInsets.only(top: 35, right: 10, left: 10),
@@ -248,16 +263,31 @@ class _CharacterListState extends State<ListaLavori> {
                           child: IconButton(
                             padding: EdgeInsets.zero,
                             icon: const Icon(
-                              Icons.perm_device_info_outlined,
-                              color: Color.fromARGB(255, 255, 143, 0),
+                              Icons.delete,
+                              color: Color.fromARGB(255, 228, 8, 8),
                               size: 20,
                             ),
                             onPressed: () {
-                              updateDatajobs((snapshot.value! as Map)['status'],
-                                  context, snapshot.key, ref);
+                              deleteJobs(snapshot.key);
                             },
                           ),
                         ),
+                        // todo view details
+                        // SizedBox(
+                        //   height: 15,
+                        //   child: IconButton(
+                        //     padding: EdgeInsets.zero,
+                        //     icon: const Icon(
+                        //       Icons.perm_device_info_outlined,
+                        //       color: Color.fromARGB(255, 255, 143, 0),
+                        //       size: 20,
+                        //     ),
+                        //     onPressed: () {
+                        //       updateDatajobs((snapshot.value! as Map)['status'],
+                        //           context, snapshot.key, ref);
+                        //     },
+                        //   ),
+                        // ),
                       ],
                     )),
               ],
@@ -287,7 +317,7 @@ class _CharacterListState extends State<ListaLavori> {
                     (snapshot.value! as Map)['marca'].toString().toUpperCase(),
                     style: const TextStyle(fontSize: 14),
                   ),
-                  const SizedBox(width: 10),
+                  const SizedBox(width: 4),
                   Text(
                       (snapshot.value! as Map)['modello']
                           .toString()
@@ -393,8 +423,7 @@ class _CharacterListState extends State<ListaLavori> {
     );
   }
 
-  // updateData(String status, var key) {
-  //   Map<String, String> data = {"status": status};
-  //   ref.child(key).update(data);
-  // }
+  deleteJobs(key) async {
+    await ref.child(key).remove();
+  }
 }

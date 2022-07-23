@@ -3,7 +3,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/main.dart';
 
-import '../routes/home.dart';
 import '../utils/fire_auth.dart';
 import '../utils/validator.dart';
 
@@ -83,34 +82,41 @@ class _LoginPageNewState extends State<LoginPageNew> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
                               Align(
-                                  alignment: Alignment.center,
-                                  child: Image.asset(
-                                    'assets/images/login.png',
-                                    width: 150,
-                                  )),
+                                alignment: Alignment.center,
+                                child: Image.asset(
+                                  'assets/images/login.png',
+                                  width: 150,
+                                ),
+                              ),
                               const Spacer(),
                             ],
                           ),
                         ),
                         Container(
-                          height: MediaQuery.of(context).size.height / 2.5,
+                          height: MediaQuery.of(context).size.height / 2.6,
                           width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.only(top: 62),
-                          child: Column(
-                            children: <Widget>[
-                              emailField(context),
-                              passwordField(context),
-                              const Align(
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 16, right: 32),
-                                  child: Text(
-                                    'Forgot Password ?',
-                                    style: TextStyle(color: Colors.grey),
+                          padding: const EdgeInsets.only(top: 40),
+                          child: Padding(
+                            padding:
+                                const EdgeInsets.only(left: 32.0, right: 32),
+                            child: Column(
+                              children: <Widget>[
+                                emailField(context),
+                                SizedBox(height: 20),
+                                passwordField(context),
+                                const Align(
+                                  alignment: Alignment.centerRight,
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.only(top: 16, right: 32),
+                                    child: Text(
+                                      'Forgot Password ?',
+                                      style: TextStyle(color: Colors.grey),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                         _isProcessing
@@ -133,60 +139,35 @@ class _LoginPageNewState extends State<LoginPageNew> {
   }
 
   Widget emailField(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.2,
-      height: 45,
-      padding: const EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(50),
-          ),
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-      child: TextFormField(
-        controller: _emailTextController,
-        focusNode: _focusEmail,
-        validator: (value) => Validator.validateEmail(
-          email: value,
+    return TextFormField(
+      controller: _emailTextController,
+      focusNode: _focusEmail,
+      validator: (value) => Validator.validateEmail(
+        email: value,
+      ),
+      decoration: InputDecoration(
+        icon: Icon(
+          Icons.email,
+          color: Colors.amber[800],
         ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          icon: Icon(
-            Icons.email,
-            color: Colors.amber[800],
-          ),
-          hintText: 'Email',
-        ),
+        hintText: 'Email',
       ),
     );
   }
 
   Widget passwordField(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width / 1.2,
-      height: 45,
-      margin: const EdgeInsets.only(top: 32),
-      padding: const EdgeInsets.only(top: 4, left: 16, right: 16, bottom: 4),
-      decoration: const BoxDecoration(
-          borderRadius: BorderRadius.all(
-            Radius.circular(50),
-          ),
-          color: Colors.white,
-          boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-      child: TextFormField(
-        controller: _passwordTextController,
-        focusNode: _focusPassword,
-        validator: (value) => Validator.validatePassword(
-          password: value,
+    return TextFormField(
+      controller: _passwordTextController,
+      focusNode: _focusPassword,
+      validator: (value) => Validator.validatePassword(
+        password: value,
+      ),
+      decoration: InputDecoration(
+        icon: Icon(
+          Icons.vpn_key,
+          color: Colors.amber[800],
         ),
-        decoration: InputDecoration(
-          border: InputBorder.none,
-          icon: Icon(
-            Icons.vpn_key,
-            color: Colors.amber[800],
-          ),
-          hintText: 'Password',
-        ),
+        hintText: 'Password',
       ),
     );
   }

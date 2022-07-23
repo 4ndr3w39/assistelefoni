@@ -6,8 +6,8 @@ import 'package:my_app/pages/profile_page.dart';
 import 'dart:math' as math;
 
 import 'package:my_app/pages/welcomePage.dart';
-import 'package:my_app/routes/lastJobs.dart';
 import 'package:my_app/routes/listaLavori.dart';
+import 'package:my_app/view/newJobs.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -93,7 +93,6 @@ class _CharacterListState extends State<Home> {
             icon: const Icon(Icons.logout_outlined),
           ),
         ),
-        //TODO
         actions: <Widget>[
           IconButton(
             icon: const Icon(
@@ -183,7 +182,7 @@ class _CharacterListState extends State<Home> {
                         ),
                         child: const Text(
                           '8',
-                          style: const TextStyle(
+                          style: TextStyle(
                             color: Colors.white,
                             fontSize: 14,
                           ),
@@ -226,41 +225,25 @@ class _CharacterListState extends State<Home> {
               children: <Widget>[
                 Container(
                   margin: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: const Text('Riepilogo Mensile'),
+                  child: const Text('Dispositivi da Consegnare'),
                 )
               ],
             ),
-            Row(
-              children: <Widget>[
-                Expanded(
-                  child: Card(
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(15.0),
-                    ),
-                    // child: SizedBox(width: 150, height: 200, child: LastJobs()
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      // mainAxisSize: MainAxisSize.min,
-                      children: const <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(13),
-                          child: Text(
-                            'Da consegnare',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
-                          ),
-                        ),
-                      ],
-                    ),
-                    // ),
-                  ),
-                )
-              ],
+            SizedBox(
+              height: 220,
+              child: Container(
+                decoration: BoxDecoration(
+                  shape: BoxShape.rectangle,
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  border: Border.all(color: Colors.amber.shade800),
+                ),
+                // child: SizedBox(width: 150, height: 200, child: LastJobs()
+                child: const Padding(
+                  padding: EdgeInsets.all(2.0),
+                  child: NuoveAssistenze(),
+                ),
+                // ),
+              ),
             ),
             CalendarDate(getCurrentDate())
           ],

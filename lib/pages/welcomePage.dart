@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:my_app/misc/clippers/oval_top_border_clipper.dart';
-import 'package:my_app/pages/loginPage.dart';
 import 'package:my_app/pages/registerPage.dart';
 
 import 'login_page_new.dart';
@@ -136,7 +135,7 @@ class ButtonWelcomePage extends StatelessWidget {
               //   ),
               // )
               MaterialPageRoute(
-                builder: (context) => const RegisterPage(),
+                builder: (context) => RegisterPage(),
               ),
             );
           },

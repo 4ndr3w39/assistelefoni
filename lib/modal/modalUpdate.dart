@@ -15,23 +15,28 @@ Future<void> updateDatajobs(
           children: <Widget>[
             TextFormField(
               controller: statusController,
+              textCapitalization: TextCapitalization.characters,
               decoration: const InputDecoration(
-                  border: UnderlineInputBorder(), labelText: "Status"),
+                border: UnderlineInputBorder(),
+                labelText: "Status",
+              ),
             )
           ],
         ),
         actions: [
           TextButton(
-              onPressed: () {
-                updateData(statusController.text, key, ref);
-                Navigator.of(context).pop();
-              },
-              child: const Text('Aggiorna')),
+            onPressed: () {
+              updateData(statusController.text, key, ref);
+              Navigator.of(context).pop();
+            },
+            child: const Text('Aggiorna'),
+          ),
           TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text('Annulla')),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Annulla'),
+          ),
         ],
       );
     },

@@ -1,64 +1,100 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_app/utils/fire_auth.dart';
+import 'package:my_app/utils/validator.dart';
 import '../main.dart';
 
 // Define a custom Form widget.
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
   const RegisterPage({Key? key}) : super(key: key);
 
   @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _registerFormKey = GlobalKey<FormState>();
+
+  final _nameTextController = TextEditingController();
+  final _emailTextController = TextEditingController();
+  final _passwordTextController = TextEditingController();
+
+  final _focusName = FocusNode();
+  final _focusEmail = FocusNode();
+  final _focusPassword = FocusNode();
+
+  bool _isProcessing = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Colors.red[800],
-        // Here we take the value from the MainPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-      ),
-      body: Column(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height / 5,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [Colors.red.shade800, const Color(0xFFf5851f)],
-              ),
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(90),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.asset(
-                    'assets/images/register.jpg',
-                    width: 100,
-                  ),
-                ),
-                const Spacer(),
-              ],
-            ),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height / 1.6,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: <Widget>[
-                emailField(context),
-                passwordField(context),
-                nameField(context),
-                birthdateField(context),
-                const Spacer(),
-                submitButton(context)
-              ],
-            ),
-          )
-        ],
+    return GestureDetector(
+      onTap: () {
+        _focusName.unfocus();
+        _focusEmail.unfocus();
+        _focusPassword.unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          elevation: 0,
+          backgroundColor: Colors.red[800],
+          // Here we take the value from the MainPage object that was created by
+          // the App.build method, and use it to set our appbar title.
+        ),
+        body: Column(
+          children: <Widget>[
+            Form(
+                key: _registerFormKey,
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      height: MediaQuery.of(context).size.height / 5,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                            Colors.red.shade800,
+                            const Color(0xFFf5851f)
+                          ],
+                        ),
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(90),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Align(
+                            alignment: Alignment.topCenter,
+                            child: Image.asset(
+                              'assets/images/register.jpg',
+                              width: 100,
+                            ),
+                          ),
+                          const Spacer(),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height / 1.6,
+                      width: MediaQuery.of(context).size.width,
+                      child: Column(
+                        children: <Widget>[
+                          emailField(context),
+                          passwordField(context),
+                          nameField(context),
+                          birthdateField(context),
+                          const Spacer(),
+                          submitButton(context)
+                        ],
+                      ),
+                    )
+                  ],
+                ))
+          ],
+        ),
       ),
     );
   }
@@ -75,7 +111,12 @@ class RegisterPage extends StatelessWidget {
           ),
           color: Colors.white,
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-      child: TextField(
+      child: TextFormField(
+        controller: _emailTextController,
+        focusNode: _focusEmail,
+        validator: (value) => Validator.validateEmail(
+          email: value,
+        ),
         decoration: InputDecoration(
           border: InputBorder.none,
           icon: Icon(
@@ -100,7 +141,12 @@ class RegisterPage extends StatelessWidget {
           ),
           color: Colors.white,
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-      child: TextField(
+      child: TextFormField(
+        controller: _nameTextController,
+        focusNode: _focusName,
+        validator: (value) => Validator.validateName(
+          name: value,
+        ),
         decoration: InputDecoration(
           border: InputBorder.none,
           icon: Icon(
@@ -150,7 +196,13 @@ class RegisterPage extends StatelessWidget {
           ),
           color: Colors.white,
           boxShadow: [BoxShadow(color: Colors.black12, blurRadius: 5)]),
-      child: TextField(
+      child: TextFormField(
+        controller: _passwordTextController,
+        focusNode: _focusPassword,
+        obscureText: true,
+        validator: (value) => Validator.validatePassword(
+          password: value,
+        ),
         decoration: InputDecoration(
           border: InputBorder.none,
           icon: Icon(
@@ -164,30 +216,50 @@ class RegisterPage extends StatelessWidget {
   }
 
   Widget submitButton(BuildContext context) {
-    return ElevatedButton(
-      style: ElevatedButton.styleFrom(
-        primary: Colors.red[800],
-        padding: const EdgeInsets.symmetric(
-          vertical: 16,
-          horizontal: 34,
-        ),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-      ),
-      child: Text(
-        'registrati'.toUpperCase(),
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-      ),
-      onPressed: () {
-        // Navigator.push(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => const MainPage(),
-        //   ),
-        // );
-      },
-    );
+    return _isProcessing
+        ? const CircularProgressIndicator()
+        : ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.red[800],
+              padding: const EdgeInsets.symmetric(
+                vertical: 16,
+                horizontal: 34,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(100),
+              ),
+            ),
+            onPressed: () async {
+              setState(() {
+                _isProcessing = true;
+              });
+
+              if (_registerFormKey.currentState!.validate()) {
+                User? user = await FireAuth.registerUsingEmailPassword(
+                  name: _nameTextController.text,
+                  email: _emailTextController.text,
+                  password: _passwordTextController.text,
+                );
+
+                setState(() {
+                  _isProcessing = false;
+                });
+
+                if (user != null) {
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                        builder: (context) => MainPage(
+                              user: user,
+                            )),
+                    ModalRoute.withName('/'),
+                  );
+                }
+              }
+            },
+            child: const Text(
+              'Sign up',
+              style: TextStyle(color: Colors.white),
+            ),
+          );
   }
 }

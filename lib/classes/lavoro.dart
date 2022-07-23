@@ -8,6 +8,7 @@ class Lavoro {
   final String modello;
   final String note;
   final String status;
+  final DateTime data;
 
   Lavoro({
     required this.serial,
@@ -19,6 +20,7 @@ class Lavoro {
     required this.marca,
     required this.modello,
     required this.note,
+    required this.data,
   });
 
   factory Lavoro.fromJson(Map<String, dynamic> json) {
@@ -32,6 +34,7 @@ class Lavoro {
       imei: json['imei'] as int,
       modello: json['modello'] as String,
       note: json['note'] as String,
+      data: json['data'] as DateTime,
     );
   }
 

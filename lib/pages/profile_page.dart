@@ -1,13 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_app/pages/login_page_new.dart';
+import 'package:my_app/pages/welcomePage.dart';
 
 import '../utils/fire_auth.dart';
 
 class ProfilePage extends StatefulWidget {
   final User user;
 
-  const ProfilePage({required this.user});
+  const ProfilePage({Key? key, required this.user}) : super(key: key);
 
   @override
   _ProfilePageState createState() => _ProfilePageState();
@@ -30,7 +30,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.amber[800],
-        title: Text('Profilo'),
+        title: const Text('Profilo'),
       ),
       body: Center(
         child: Column(
@@ -43,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   CircleAvatar(
                     radius: 75,
                     backgroundColor: Colors.grey.shade200,
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       radius: 70,
                       backgroundImage: AssetImage('assets/images/default.png'),
                     ),
@@ -52,8 +52,8 @@ class _ProfilePageState extends State<ProfilePage> {
                     bottom: 1,
                     right: 1,
                     child: Container(
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
+                      child: const Padding(
+                        padding: EdgeInsets.all(2.0),
                         child: Icon(Icons.add_a_photo, color: Colors.black),
                       ),
                       decoration: BoxDecoration(
@@ -61,7 +61,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             width: 3,
                             color: Colors.white,
                           ),
-                          borderRadius: BorderRadius.all(
+                          borderRadius: const BorderRadius.all(
                             Radius.circular(
                               50,
                             ),
@@ -69,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           color: Colors.white,
                           boxShadow: [
                             BoxShadow(
-                              offset: Offset(2, 4),
+                              offset: const Offset(2, 4),
                               color: Colors.black.withOpacity(
                                 0.3,
                               ),
@@ -82,7 +82,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
             Container(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Table(
                 children: [
                   TableRow(children: [
@@ -131,9 +131,9 @@ class _ProfilePageState extends State<ProfilePage> {
             // ),
             // SizedBox(height: 16.0),
 
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _isSendingVerification
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -147,11 +147,11 @@ class _ProfilePageState extends State<ProfilePage> {
                             _isSendingVerification = false;
                           });
                         },
-                        child: Text('Verify email'),
+                        child: const Text('Verify email'),
                       ),
-                      SizedBox(width: 8.0),
+                      const SizedBox(width: 8.0),
                       IconButton(
-                        icon: Icon(Icons.refresh),
+                        icon: const Icon(Icons.refresh),
                         onPressed: () async {
                           User? user = await FireAuth.refreshUser(_currentUser);
 
@@ -164,9 +164,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ],
                   ),
-            SizedBox(height: 16.0),
+            const SizedBox(height: 16.0),
             _isSigningOut
-                ? CircularProgressIndicator()
+                ? const CircularProgressIndicator()
                 : ElevatedButton(
                     onPressed: () async {
                       setState(() {
@@ -178,11 +178,11 @@ class _ProfilePageState extends State<ProfilePage> {
                       });
                       Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (context) => LoginPageNew(),
+                          builder: (context) => const WelcomePage(),
                         ),
                       );
                     },
-                    child: Text('Sign out'),
+                    child: const Text('Sign out'),
                     style: ElevatedButton.styleFrom(
                       primary: Colors.red,
                       shape: RoundedRectangleBorder(

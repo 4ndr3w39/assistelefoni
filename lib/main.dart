@@ -4,7 +4,7 @@ import 'package:my_app/app.dart';
 import 'package:my_app/routes/home.dart';
 import 'package:my_app/routes/listaContatti.dart';
 import 'package:my_app/routes/listaLavori.dart';
-import 'package:my_app/routes/nuovaAssistenza.dart';
+import 'package:my_app/components/nuovaAssistenza.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:my_app/firebase_options.dart';
@@ -14,7 +14,9 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(
+    const MyApp(),
+  );
 }
 
 class MainPage extends StatefulWidget {
