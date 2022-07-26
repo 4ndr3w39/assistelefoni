@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/components/calendarDate.dart';
@@ -6,7 +7,6 @@ import 'package:my_app/pages/profile_page.dart';
 import 'dart:math' as math;
 
 import 'package:my_app/pages/welcomePage.dart';
-import 'package:my_app/routes/listaLavori.dart';
 import 'package:my_app/view/newJobs.dart';
 
 class Home extends StatefulWidget {
@@ -45,7 +45,7 @@ class _CharacterListState extends State<Home> {
   //   Query ref = FirebaseDatabase.instance
   //       .ref("lavori")
   //       .orderByChild('status')
-  //       .equalTo("Nuova");
+  //       .equalTo("DA CONSEGNARE");
 
   //   var snapshot = await ref.get();
   //   var resutl = snapshot.children.length;

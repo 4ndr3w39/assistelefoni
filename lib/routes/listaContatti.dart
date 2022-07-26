@@ -23,16 +23,12 @@ class _CharacterListState extends State<ListaContatti> {
         title: const Text('Lista Contatti'),
         automaticallyImplyLeading: false,
       ),
-      // appBar: AppBar(
-      //   title: const Text('Lista Contatti'),
-      // ),
-      // body: Container(child: const Contact()),
       body: FutureBuilder<List<Contact>>(
         future: fetchContacts(http.Client()),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return const Center(
-              child: Text('An error has occurred!'),
+              child: Text('Errore....'),
             );
           } else if (snapshot.hasData) {
             return ContactsList(contacts: snapshot.data!);
@@ -99,10 +95,13 @@ class ContactsList extends StatelessWidget {
                   child: const Text('Vedi'),
                   onPressed: () {
                     Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                DetailPage(contact: contacts[index])));
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailPage(
+                          contact: contacts[index],
+                        ),
+                      ),
+                    );
                   },
                 ),
                 // trailing: Text(contacts[index].nickname),

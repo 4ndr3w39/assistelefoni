@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/app.dart';
 import 'package:my_app/routes/home.dart';
@@ -6,6 +7,7 @@ import 'package:my_app/routes/listaContatti.dart';
 import 'package:my_app/routes/listaLavori.dart';
 import 'package:my_app/components/nuovaAssistenza.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:my_app/routes/settings.dart';
 import 'firebase_options.dart';
 import 'package:my_app/firebase_options.dart';
 
@@ -14,6 +16,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  FirebaseDatabase.instance.setPersistenceEnabled(true);
   runApp(
     const MyApp(),
   );
@@ -50,11 +53,11 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   late final User user;
 
-  // TODO perchè final?
-  final screens = [
+  var screens = [
     const Home(),
     const ListaContatti(),
-    const ListaLavori(),
+    ListaLavori(),
+    const Settings(),
   ];
 
   _onItemTapped(int index) {
@@ -74,12 +77,6 @@ class _MainPageState extends State<MainPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Colors.amber[800],
-      //   title: const Text('Assistelefoni'),
-      //   // Here we take the value from the MainPage object that was created by
-      //   // the App.build method, and use it to set our appbar title.
-      // ),
       body: screens[_selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,

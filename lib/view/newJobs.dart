@@ -177,15 +177,19 @@ class _CharacterListState extends State<NuoveAssistenze> {
 
   Widget _buildTitle(snapshot) {
     return Padding(
-      padding: const EdgeInsets.only(left: 8, top: 16),
+      padding: const EdgeInsets.only(left: 8, top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Row(
             children: <Widget>[
-              const Text(
-                "Dispositivo: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              const Icon(
+                Icons.smartphone,
+                size: 20,
+                color: Color.fromARGB(255, 18, 101, 234),
+              ),
+              const SizedBox(
+                width: 5,
               ),
               Text(
                 (snapshot.value! as Map)['marca'].toString().toUpperCase(),
@@ -198,9 +202,13 @@ class _CharacterListState extends State<NuoveAssistenze> {
           ),
           Row(
             children: <Widget>[
-              const Text(
-                "Imei: ",
-                style: TextStyle(fontWeight: FontWeight.bold),
+              const Icon(
+                Icons.info_outline,
+                size: 20,
+                color: Color.fromARGB(255, 18, 101, 234),
+              ),
+              const SizedBox(
+                width: 5,
               ),
               Text(
                 (snapshot.value! as Map)['imei'].toString().toUpperCase(),

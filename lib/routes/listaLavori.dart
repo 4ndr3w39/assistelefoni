@@ -1,18 +1,21 @@
 import 'dart:convert';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/modal/modalUpdate.dart';
 
 class ListaLavori extends StatefulWidget {
-  const ListaLavori({Key? key}) : super(key: key);
+  ListaLavori({Key? key}) : super(key: key);
+
   @override
-  _CharacterListState createState() => _CharacterListState();
+  State<ListaLavori> createState() => _ListaLavoriState();
 }
 
-class _CharacterListState extends State<ListaLavori> {
-  DatabaseReference ref = FirebaseDatabase.instance.ref().child("lavori");
+class _ListaLavoriState extends State<ListaLavori> {
+  final DatabaseReference userRef =
+      FirebaseDatabase.instance.ref().child("lavori");
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +26,7 @@ class _CharacterListState extends State<ListaLavori> {
         automaticallyImplyLeading: false,
       ),
       body: FirebaseAnimatedList(
-        query: ref.orderByChild('data'),
+        query: userRef.orderByChild('data'),
         shrinkWrap: true,
         defaultChild: const Center(
           child: CircularProgressIndicator(
@@ -135,7 +138,8 @@ class _CharacterListState extends State<ListaLavori> {
                     side: _borderColor,
                   ),
                   elevation: 2,
-                  margin: const EdgeInsets.only(top: 35, right: 10, left: 10),
+                  margin: const EdgeInsets.only(
+                      top: 35, right: 10, left: 10, bottom: 5),
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Theme(
@@ -251,7 +255,7 @@ class _CharacterListState extends State<ListaLavori> {
                             ),
                             onPressed: () {
                               updateDatajobs((snapshot.value! as Map)['status'],
-                                  context, snapshot.key, ref);
+                                  context, snapshot.key, userRef);
                             },
                           ),
                         ),
@@ -345,9 +349,10 @@ class _CharacterListState extends State<ListaLavori> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Imei: ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    const Icon(
+                      Icons.info_outline,
+                      size: 20,
+                      color: Color.fromARGB(255, 18, 101, 234),
                     ),
                     Text(
                       (snapshot.value! as Map)['imei'].toString().toUpperCase(),
@@ -360,9 +365,10 @@ class _CharacterListState extends State<ListaLavori> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "serial: ",
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    const Icon(
+                      Icons.key_rounded,
+                      size: 20,
+                      color: Color.fromARGB(255, 18, 101, 234),
                     ),
                     Text(
                       (snapshot.value! as Map)['serial']
@@ -380,9 +386,10 @@ class _CharacterListState extends State<ListaLavori> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                const Text(
-                  "Note: ",
-                  style: TextStyle(fontWeight: FontWeight.bold),
+                const Icon(
+                  Icons.text_snippet_rounded,
+                  size: 20,
+                  color: Color.fromARGB(255, 18, 101, 234),
                 ),
                 Expanded(
                   child: Text(
@@ -392,38 +399,12 @@ class _CharacterListState extends State<ListaLavori> {
               ],
             ),
           ),
-          // ElevatedButton(
-          //   child: const Text('Show Modal Bottom Sheet'),
-          //   onPressed: () {
-          //     showModalBottomSheet(
-          //       context: context,
-          //       builder: (context) {
-          //         return Wrap(
-          //           children: const <Widget>[
-          //             ListTile(
-          //               leading: Icon(Icons.share),
-          //               title: Text('Share'),
-          //             ),
-          //             ListTile(
-          //               leading: Icon(Icons.copy),
-          //               title: Text('Copy Link'),
-          //             ),
-          //             ListTile(
-          //               leading: Icon(Icons.edit),
-          //               title: Text('Edit'),
-          //             ),
-          //           ],
-          //         );
-          //       },
-          //     );
-          //   },
-          // ),
         ],
       ),
     );
   }
 
   deleteJobs(key) async {
-    await ref.child(key).remove();
+    await userRef.child(key).remove();
   }
 }

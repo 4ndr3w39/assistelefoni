@@ -58,7 +58,7 @@ class MyCustomFormState extends State<MyCustomForm> {
   var waterCheck = false;
   var warrantyCheck = false;
   var finalNumberTkt = '';
-  var statusTck = 'Nuova';
+  var statusTck = 'NUOVA';
   String marcaValue = 'Apple';
   String problemValue = 'Batteria';
   final Map<String, dynamic> formData = {

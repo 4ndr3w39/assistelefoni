@@ -57,6 +57,8 @@ PODS:
     - GoogleUtilities/Logger
   - GTMSessionFetcher/Core (1.7.2)
   - leveldb-library (1.22.1)
+  - local_auth_ios (0.0.1):
+    - Flutter
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -71,6 +73,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_database (from `.symlinks/plugins/firebase_database/ios`)
   - Flutter (from `Flutter`)
+  - local_auth_ios (from `.symlinks/plugins/local_auth_ios/ios`)
   - shared_preferences_ios (from `.symlinks/plugins/shared_preferences_ios/ios`)
 
 SPEC REPOS:
@@ -96,6 +99,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_database/ios"
   Flutter:
     :path: Flutter
+  local_auth_ios:
+    :path: ".symlinks/plugins/local_auth_ios/ios"
   shared_preferences_ios:
     :path: ".symlinks/plugins/shared_preferences_ios/ios"
 
@@ -113,6 +118,7 @@ SPEC CHECKSUMS:
   GoogleUtilities: e0913149f6b0625b553d70dae12b49fc62914fd1
   GTMSessionFetcher: 5595ec75acf5be50814f81e9189490412bad82ba
   leveldb-library: 50c7b45cbd7bf543c81a468fe557a16ae3db8729
+  local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 99b6f43f9e1044bd87a95a60beff28c2c44ddb72
   shared_preferences_ios: 548a61f8053b9b8a49ac19c1ffbc8b92c50d68ad
