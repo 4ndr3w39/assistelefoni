@@ -122,20 +122,8 @@ class ButtonWelcomePage extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
-              // TODO alternativa a MaterialPageRoute
-              // PageRouteBuilder(
-              //   pageBuilder: (context, a1, a2) => const FirstRoute(),
-              //   transitionsBuilder: (context, a1, a2, child) =>
-              //       FadeTransition(
-              //     opacity: a1,
-              //     child: child,
-              //   ),
-              //   transitionDuration: const Duration(
-              //     milliseconds: 300,
-              //   ),
-              // )
               MaterialPageRoute(
-                builder: (context) => RegisterPage(),
+                builder: (context) => const RegisterPage(),
               ),
             );
           },

@@ -15,14 +15,33 @@ class LoginPageNew extends StatefulWidget {
 
 class _LoginPageNewState extends State<LoginPageNew> {
   final _formKey = GlobalKey<FormState>();
+  final _formKeyResetPassword = GlobalKey<FormState>();
 
   final _emailTextController = TextEditingController();
+  final _emailTextControllerResend = TextEditingController();
   final _passwordTextController = TextEditingController();
 
   final _focusEmail = FocusNode();
+  final _focusEmailResend = FocusNode();
   final _focusPassword = FocusNode();
 
   bool _isProcessing = false;
+
+  Future resetPassword(context) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+          email: _emailTextControllerResend.text.trim());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Email Inviata'),
+          backgroundColor: Colors.red,
+        ),
+      );
+      Navigator.of(context).pop();
+    } on FirebaseAuthException catch (e) {
+      Navigator.of(context).pop();
+    }
+  }
 
   Future<FirebaseApp> _initializeFirebase() async {
     FirebaseApp firebaseApp = await Firebase.initializeApp();
@@ -41,6 +60,53 @@ class _LoginPageNewState extends State<LoginPageNew> {
   }
 
   @override
+  void dispose() {
+    _emailTextControllerResend.dispose();
+    super.dispose();
+  }
+
+  Future<void> openModalResend() {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Form(
+          key: _formKeyResetPassword,
+          child: AlertDialog(
+            insetPadding:
+                const EdgeInsets.symmetric(vertical: 200, horizontal: 30),
+            title: const Text('Reimposta password'),
+            content: Column(
+              children: <Widget>[
+                TextFormField(
+                  controller: _emailTextControllerResend,
+                  focusNode: _focusEmailResend,
+                  validator: (value) => Validator.validateEmail(
+                    email: value,
+                  ),
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  resetPassword(context);
+                },
+                child: const Text('Invia'),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: const Text('Annulla'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -52,80 +118,97 @@ class _LoginPageNewState extends State<LoginPageNew> {
           elevation: 0,
           backgroundColor: Colors.amber[800],
         ),
+        resizeToAvoidBottomInset: true,
         body: FutureBuilder(
           future: _initializeFirebase(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return Column(
-                children: [
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: <Widget>[
-                        Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height / 3,
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              begin: Alignment.topCenter,
-                              end: Alignment.bottomCenter,
-                              colors: [
-                                Colors.amber.shade800,
-                                const Color(0xFFf5851f)
-                              ],
-                            ),
-                            borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(90),
-                            ),
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Align(
-                                alignment: Alignment.center,
-                                child: Image.asset(
-                                  'assets/images/login.png',
-                                  width: 150,
-                                ),
+              return Padding(
+                padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom),
+                child: Column(
+                  children: [
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: <Widget>[
+                          Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: MediaQuery.of(context).size.height / 3,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [
+                                  Colors.amber.shade800,
+                                  const Color(0xFFf5851f)
+                                ],
                               ),
-                              const Spacer(),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          height: MediaQuery.of(context).size.height / 2.6,
-                          width: MediaQuery.of(context).size.width,
-                          padding: const EdgeInsets.only(top: 40),
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 32.0, right: 32),
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(90),
+                              ),
+                            ),
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
-                                emailField(context),
-                                SizedBox(height: 20),
-                                passwordField(context),
-                                const Align(
-                                  alignment: Alignment.centerRight,
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.only(top: 16, right: 32),
-                                    child: Text(
-                                      'Forgot Password ?',
-                                      style: TextStyle(color: Colors.grey),
-                                    ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Image.asset(
+                                    'assets/images/login.png',
+                                    width: 150,
                                   ),
                                 ),
+                                const Spacer(),
                               ],
                             ),
                           ),
-                        ),
-                        _isProcessing
-                            ? const CircularProgressIndicator()
-                            : submitButton(context)
-                      ],
-                    ),
-                  )
-                ],
+                          Container(
+                            height: MediaQuery.of(context).size.height / 2.6,
+                            width: MediaQuery.of(context).size.width,
+                            padding: const EdgeInsets.only(top: 40),
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 32.0, right: 32),
+                              child: Column(
+                                children: <Widget>[
+                                  emailField(context),
+                                  const SizedBox(height: 20),
+                                  passwordField(context),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(
+                                            top: 30, right: 20),
+                                        // child: ElevatedButton(
+                                        //   onPressed: openModalResend,
+                                        //   child:
+                                        //       const Text('Password dimenticata?'),
+                                        // ),
+                                        child: GestureDetector(
+                                          onTap: openModalResend,
+                                          child: const Text(
+                                              'Password dimenticata?',
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  decoration: TextDecoration
+                                                      .underline)),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                          _isProcessing
+                              ? const CircularProgressIndicator()
+                              : submitButton(context)
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               );
             }
 
@@ -199,9 +282,9 @@ class _LoginPageNewState extends State<LoginPageNew> {
           });
 
           User? user = await FireAuth.signInUsingEmailPassword(
-            email: _emailTextController.text,
-            password: _passwordTextController.text,
-          );
+              email: _emailTextController.text,
+              password: _passwordTextController.text,
+              context: context);
 
           setState(() {
             _isProcessing = false;

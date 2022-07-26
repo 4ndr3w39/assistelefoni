@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 class FireAuth {
   // For registering a new user
@@ -34,10 +35,8 @@ class FireAuth {
   }
 
   // For signing in an user (have already registered)
-  static Future<User?> signInUsingEmailPassword({
-    required String email,
-    required String password,
-  }) async {
+  static Future<User?> signInUsingEmailPassword(
+      {required String email, required String password, context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -51,7 +50,14 @@ class FireAuth {
       if (e.code == 'user-not-found') {
         print('No user found for that email.');
       } else if (e.code == 'wrong-password') {
-        print('Wrong password provided.');
+        print('wrong-password');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('Password sbagliata'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     }
 
