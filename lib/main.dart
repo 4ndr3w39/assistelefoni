@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -8,24 +10,34 @@ import 'package:my_app/routes/listaLavori.dart';
 import 'package:my_app/components/nuovaAssistenza.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:my_app/routes/settings.dart';
+import 'package:my_app/utils/local_auth.dart';
 import 'firebase_options.dart';
 import 'package:my_app/firebase_options.dart';
 
-void main() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  bool isAuthenticated = await AuthService.authenticateUser();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
   FirebaseDatabase.instance.setPersistenceEnabled(true);
-  runApp(
-    const MyApp(),
-  );
+
+  if (isAuthenticated) {
+    runApp(MyApp(
+      isAuthenticated: isAuthenticated,
+    ));
+  } else {
+    exit(0);
+  }
+  // runApp(
+  //   const MyApp(),
+  // );
 }
 
 class MainPage extends StatefulWidget {
-  final User user;
+  late User user;
 
-  const MainPage({Key? key, required this.user}) : super(key: key);
+  MainPage({Key? key, User? user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect

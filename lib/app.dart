@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/main.dart';
 import 'package:my_app/pages/welcomePage.dart';
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({required this.isAuthenticated});
+
+  final bool isAuthenticated;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -11,6 +14,6 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: const WelcomePage(),
+        home: isAuthenticated ? const WelcomePage() : MainPage(),
       );
 }

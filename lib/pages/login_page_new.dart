@@ -38,7 +38,7 @@ class _LoginPageNewState extends State<LoginPageNew> {
         ),
       );
       Navigator.of(context).pop();
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       Navigator.of(context).pop();
     }
   }
@@ -211,7 +211,6 @@ class _LoginPageNewState extends State<LoginPageNew> {
                 ),
               );
             }
-
             return const Center(
               child: CircularProgressIndicator(),
             );

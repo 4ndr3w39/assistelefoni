@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:my_app/main.dart';
 import 'package:my_app/misc/clippers/oval_top_border_clipper.dart';
 import 'package:my_app/pages/registerPage.dart';
+import 'package:my_app/utils/local_auth.dart';
 
 import 'login_page_new.dart';
 
@@ -67,6 +69,25 @@ class WelcomePage extends StatelessWidget {
                 ),
                 const ButtonWelcomePage(title: 'Log in', logIn: true),
                 const ButtonWelcomePage(title: 'Registrati', logIn: false),
+                ElevatedButton(
+                    child: Text('touch id'),
+                    onPressed: () async {
+                      bool isAuthenticated =
+                          await AuthService.authenticateUser();
+                      if (isAuthenticated) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainPage()),
+                        );
+                      } else {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            backgroundColor: Colors.red,
+                            content: Text('Authentication failed.'),
+                          ),
+                        );
+                      }
+                    })
               ],
             ),
           ),

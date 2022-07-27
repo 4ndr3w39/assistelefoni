@@ -94,20 +94,28 @@ class _CharacterListState extends State<Home> {
           ),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.account_box,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => ProfilePage(user: getUser()),
-                ),
-              );
-            },
-          )
+          auth.currentUser != null
+              ? IconButton(
+                  icon: const Icon(
+                    Icons.account_box,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ProfilePage(user: getUser()),
+                      ),
+                    );
+                  },
+                )
+              : IconButton(
+                  icon: const Icon(
+                    Icons.no_accounts_rounded,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {},
+                )
         ],
       ),
       body: Padding(
