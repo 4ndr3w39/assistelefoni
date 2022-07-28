@@ -1,9 +1,11 @@
 import 'dart:math';
 import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:my_app/utils/storage_service.dart';
 
 class NuovaAssistenza extends StatefulWidget {
   String marca, modello, imei, serial, note;
@@ -22,42 +24,15 @@ class NuovaAssistenza extends StatefulWidget {
 }
 
 class _NuovaAssistenzaState extends State<NuovaAssistenza> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.amber[800],
-        title: const Text('Crea Nuova Assistenza'),
-      ),
-      body: const Center(
-        child: MyCustomForm(),
-      ),
-    );
-  }
-}
+  final Storage storage = Storage();
 
-// Define a custom Form widget.
-class MyCustomForm extends StatefulWidget {
-  const MyCustomForm({Key? key}) : super(key: key);
-
-  @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
-  }
-}
-
-// Define a corresponding State class.
-// This class holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a `GlobalKey<FormState>`,
-  // not a GlobalKey<MyCustomFormState>.
   final _formKey = GlobalKey<FormState>();
   var waterCheck = false;
   var warrantyCheck = false;
+  var _photoLoaded = false;
   var finalNumberTkt = '';
+  var path = '';
+  var fileName = '';
   var statusTck = 'NUOVA';
   String marcaValue = 'Apple';
   String problemValue = 'Batteria';
@@ -72,7 +47,46 @@ class MyCustomFormState extends State<MyCustomForm> {
     'acqua': false,
     'garanzia': false,
     'data': '',
+    'photo': false,
   };
+
+  uploadFile() async {
+    final results = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png'],
+    );
+
+    if (results == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Nessuna foto selezionata'),
+        ),
+      );
+      setState(() {
+        _photoLoaded = false;
+        formData['photo'] = _photoLoaded;
+      });
+      return null;
+    }
+
+    path = results.files.single.path!;
+    fileName = results.files.single.name;
+
+    storage.uploadFile(path, fileName, finalNumberTkt).then(
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Immagine caricata'),
+              backgroundColor: Colors.green,
+            ),
+          ),
+        );
+
+    setState(() {
+      _photoLoaded = true;
+      formData['photo'] = _photoLoaded;
+    });
+  }
 
   @override
   void initState() {
@@ -137,6 +151,10 @@ class MyCustomFormState extends State<MyCustomForm> {
     // Build a Form widget using the _formKey created above.
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.amber[800],
+        title: const Text('Crea Nuova Assistenza'),
+      ),
       body: SizedBox(
         height: 1500,
         child: Form(
@@ -167,7 +185,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                           formData['marca'] = marcaValue;
                         });
                       },
-                      items: <String>['Apple', 'Samsun', 'Huawei', 'Htc']
+                      items: <String>['Apple', 'Samsung', 'Huawei', 'Htc']
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -312,96 +330,127 @@ class MyCustomFormState extends State<MyCustomForm> {
                       },
                     ),
                   ),
-
-                  // CheckboxListTile(
-                  //   title: const Text("Garanzia"),
-                  //   value: warrantyCheck,
-                  //   activeColor: Colors.amber[800],
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       warrantyCheck = value!;
-                  //       formData['garanzia'] = warrantyCheck;
-                  //     });
-                  //   },
-                  //   controlAffinity:
-                  //       ListTileControlAffinity.leading, //  <-- leading Checkbox
-                  // ),
-                  TextButton(
-                    // here toggle the bool value so that when you click
-                    // on the whole item, it will reflect changes in Checkbox
-                    onPressed: () => setState(() => {
-                          warrantyCheck = !warrantyCheck,
-                          formData['garanzia'] = warrantyCheck
-                        }),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10.0),
+                    child: Column(
                       children: [
-                        SizedBox(
-                          height: 0,
-                          width: 50.0,
-                          child: Checkbox(
-                            value: warrantyCheck,
-                            onChanged: (value) {
-                              setState(
-                                () {
-                                  warrantyCheck = value!;
+                        TextButton(
+                          // here toggle the bool value so that when you click
+                          // on the whole item, it will reflect changes in Checkbox
+                          onPressed: () => setState(() => {
+                                warrantyCheck = !warrantyCheck,
+                                formData['garanzia'] = warrantyCheck
+                              }),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 0,
+                                        width: 50.0,
+                                        child: Checkbox(
+                                          value: warrantyCheck,
+                                          onChanged: (value) {
+                                            setState(
+                                              () {
+                                                warrantyCheck = value!;
+                                              },
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      // You can play with the width to adjust your
+                                      // desired spacing
+                                      const SizedBox(width: 10.0),
+                                      const Text("Garanzia")
+                                    ],
+                                  )
+                                ],
+                              ),
+                              ElevatedButton(
+                                onPressed: () {
+                                  uploadFile();
                                 },
-                              );
-                            },
+                                child: const Text('Allega foto'),
+                              )
+                            ],
                           ),
                         ),
-                        // You can play with the width to adjust your
-                        // desired spacing
-                        const SizedBox(width: 10.0),
-                        const Text("Garanzia")
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              children: [
+                                TextButton(
+                                  // here toggle the bool value so that when you click
+                                  // on the whole item, it will reflect changes in Checkbox
+                                  onPressed: () => setState(() => {
+                                        waterCheck = !waterCheck,
+                                        formData['acqua'] = waterCheck
+                                      }),
+                                  child: Row(
+                                    children: [
+                                      SizedBox(
+                                        height: 0.0,
+                                        width: 50.0,
+                                        child: Checkbox(
+                                          value: waterCheck,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              waterCheck = value!;
+                                            });
+                                          },
+                                        ),
+                                      ),
+                                      // You can play with the width to adjust your
+                                      // desired spacing
+                                      const SizedBox(width: 10.0),
+                                      const Text("Ha preso acqua")
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Column(
+                                children: [
+                                  FutureBuilder(
+                                    future: storage.downloadURL(
+                                        'IMG_0001.JPG', finalNumberTkt),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<String> snapshot) {
+                                      if (snapshot.connectionState ==
+                                              ConnectionState.done &&
+                                          snapshot.hasData) {
+                                        return SizedBox(
+                                            width: 70,
+                                            height: 50,
+                                            child: Image.network(
+                                              snapshot.data!,
+                                              fit: BoxFit.cover,
+                                            ));
+                                      }
+
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const CircularProgressIndicator();
+                                      }
+
+                                      return Container();
+                                    },
+                                  )
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
                       ],
                     ),
                   ),
-                  TextButton(
-                    // here toggle the bool value so that when you click
-                    // on the whole item, it will reflect changes in Checkbox
-                    onPressed: () => setState(() => {
-                          waterCheck = !waterCheck,
-                          formData['acqua'] = waterCheck
-                        }),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: 0.0,
-                          width: 50.0,
-                          child: Checkbox(
-                            value: waterCheck,
-                            onChanged: (value) {
-                              setState(() {
-                                waterCheck = value!;
-                              });
-                            },
-                          ),
-                        ),
-                        // You can play with the width to adjust your
-                        // desired spacing
-                        const SizedBox(width: 10.0),
-                        const Text("Ha preso acqua")
-                      ],
-                    ),
-                  ),
-
-                  // CheckboxListTile(
-                  //   title: const Text("Ha preso acqua?"),
-                  //   value: waterCheck,
-                  //   activeColor: Colors.amber[800],
-                  //   onChanged: (value) {
-                  //     setState(() {
-                  //       waterCheck = value!;
-                  //       formData['acqua'] = waterCheck;
-                  //     });
-                  //   },
-                  //   controlAffinity:
-                  //       ListTileControlAffinity.leading, //  <-- leading Checkbox
-                  // ),
-                  // const Padding(),
-
                   Padding(
                     padding: const EdgeInsets.all(20),
                     child: Row(
@@ -427,7 +476,7 @@ class MyCustomFormState extends State<MyCustomForm> {
                                       ScaffoldMessenger.of(context)
                                           .showSnackBar(
                                         const SnackBar(
-                                          content: Text('Processing Data'),
+                                          content: Text('Richiesta inviata'),
                                         ),
                                       );
                                       DatabaseReference nuovoLavoro =
@@ -442,15 +491,19 @@ class MyCustomFormState extends State<MyCustomForm> {
                                         "garanzia": formData['garanzia'],
                                         "acqua": formData['acqua'],
                                         "status": statusTck,
+                                        "foto": _photoLoaded,
                                         "data": getDateToday(),
                                       });
                                     }
+
+                                    Navigator.of(context).pop();
                                   } on SocketException catch (_) {
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
-                                          content:
-                                              Text('No connection available')),
+                                        content: Text('Nessuna Connessione'),
+                                      ),
                                     );
+                                    Navigator.of(context).pop();
                                   }
                                 }
                               },

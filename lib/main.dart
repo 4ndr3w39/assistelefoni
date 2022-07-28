@@ -15,7 +15,6 @@ import 'firebase_options.dart';
 import 'package:my_app/firebase_options.dart';
 
 Future<void> main() async {
-  await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
   bool isAuthenticated = await AuthService.authenticateUser();
   await Firebase.initializeApp(
@@ -36,9 +35,9 @@ Future<void> main() async {
 }
 
 class MainPage extends StatefulWidget {
-  late User user;
+  final User? user;
 
-  MainPage({Key? key, User? user}) : super(key: key);
+  MainPage({Key? key, required this.user}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -64,14 +63,32 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
-  late final User user;
 
-  var screens = [
-    const Home(),
-    const ListaContatti(),
-    ListaLavori(),
-    const Settings(),
-  ];
+  // var screens = [
+  //    Home(),
+  //   const ListaContatti(),
+  //   ListaLavori(),
+  //   const Settings(),
+  // ];
+
+  getScreen(index) {
+    final home = Home(user: widget.user!);
+    final _listaContatti = ListaContatti();
+    final _listaLavori = ListaLavori();
+    final _settings = Settings();
+
+    switch (index) {
+      case 0:
+        return home;
+      case 1:
+        return _listaContatti;
+      case 2:
+        return _listaLavori;
+      case 3:
+        return _settings;
+      default:
+    }
+  }
 
   _onItemTapped(int index) {
     setState(() {
@@ -90,7 +107,7 @@ class _MainPageState extends State<MainPage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      body: screens[_selectedIndex],
+      body: getScreen(_selectedIndex),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.shifting,
         selectedItemColor: Colors.amber[800],

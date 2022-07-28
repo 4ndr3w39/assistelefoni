@@ -22,7 +22,6 @@ class AuthService {
       try {
         isAuthenticated = await _localAuthentication.authenticate(
             localizedReason: 'To continue, you must complete the biometrics',
-            biometricOnly: true,
             useErrorDialogs: true,
             stickyAuth: true);
       } on PlatformException catch (e) {

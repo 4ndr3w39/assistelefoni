@@ -11,7 +11,7 @@ class Settings extends StatelessWidget {
         title: const Text('Settings'),
         automaticallyImplyLeading: false,
       ),
-      body: Center(
+      body: const Center(
         child: Text('Ciao'),
       ),
     );

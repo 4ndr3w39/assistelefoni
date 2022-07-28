@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/welcomePage.dart';
@@ -27,27 +24,6 @@ class _ProfilePageState extends State<ProfilePage> {
   void initState() {
     _currentUser = widget.user;
     super.initState();
-  }
-
-  uploadFile() async {
-    final results = await FilePicker.platform.pickFiles(
-      allowMultiple: true,
-      type: FileType.custom,
-      allowedExtensions: ['jpg', 'png'],
-    );
-
-    if (results == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('no file selected'),
-        ),
-      );
-      return null;
-    }
-    final path = results.files.single.path!;
-    final fileName = results.files.single.name;
-
-    storage.uploadFile(path, fileName).then((value) => print('Done'));
   }
 
   @override
@@ -78,9 +54,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     bottom: 1,
                     right: 1,
                     child: GestureDetector(
-                      onTap: () {
-                        uploadFile();
-                      },
+                      onTap: () {},
                       child: Container(
                         child: const Padding(
                           padding: EdgeInsets.all(2.0),
@@ -221,26 +195,6 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
-            FutureBuilder(
-                future: storage.downloadURL('IMG_0002.JPG'),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      snapshot.hasData) {
-                    return SizedBox(
-                        width: 300,
-                        height: 250,
-                        child: Image.network(
-                          snapshot.data!,
-                          fit: BoxFit.cover,
-                        ));
-                  }
-                  if (snapshot.connectionState == ConnectionState.waiting ||
-                      !snapshot.hasData) {
-                    return const CircularProgressIndicator();
-                  }
-                  return Container();
-                })
           ],
         ),
       ),

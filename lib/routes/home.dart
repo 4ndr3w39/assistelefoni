@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:my_app/components/calendarDate.dart';
@@ -10,7 +9,9 @@ import 'package:my_app/pages/welcomePage.dart';
 import 'package:my_app/view/newJobs.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  final User user;
+
+  const Home({Key? key, required this.user}) : super(key: key);
 
   @override
   _CharacterListState createState() => _CharacterListState();
@@ -40,22 +41,11 @@ class _CharacterListState extends State<Home> {
   bool _isSigningOut = false;
   // DatabaseReference ref = FirebaseDatabase.instance.ref("lavori");
   final FirebaseAuth auth = FirebaseAuth.instance;
-
-  // countLavoriNuovi() async {
-  //   Query ref = FirebaseDatabase.instance
-  //       .ref("lavori")
-  //       .orderByChild('status')
-  //       .equalTo("DA CONSEGNARE");
-
-  //   var snapshot = await ref.get();
-  //   var resutl = snapshot.children.length;
-  //   print(resutl);
-  //   return resutl;
-  // }
+  User? _currentUser;
 
   @override
   void initState() {
-    // countLavoriNuovi();
+    _currentUser = widget.user;
     super.initState();
   }
 
@@ -134,22 +124,13 @@ class _CharacterListState extends State<Home> {
                     fontSize: 20),
               ),
             ),
-            const Text(
-              'Andrea',
-              style: TextStyle(
+            Text(
+              '${_currentUser?.displayName}',
+              style: const TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                   fontSize: 20),
             ),
-            // Row(
-            //   children: <Widget>[
-            //     ElevatedButton(
-            //         onPressed: () {
-            //           addNuovoLavoro();
-            //         },
-            //         child: const Text('write'))
-            //   ],
-            // ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[

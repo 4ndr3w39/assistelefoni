@@ -69,25 +69,6 @@ class WelcomePage extends StatelessWidget {
                 ),
                 const ButtonWelcomePage(title: 'Log in', logIn: true),
                 const ButtonWelcomePage(title: 'Registrati', logIn: false),
-                ElevatedButton(
-                    child: Text('touch id'),
-                    onPressed: () async {
-                      bool isAuthenticated =
-                          await AuthService.authenticateUser();
-                      if (isAuthenticated) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => MainPage()),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            backgroundColor: Colors.red,
-                            content: Text('Authentication failed.'),
-                          ),
-                        );
-                      }
-                    })
               ],
             ),
           ),

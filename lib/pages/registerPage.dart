@@ -41,59 +41,61 @@ class _RegisterPageState extends State<RegisterPage> {
           // Here we take the value from the MainPage object that was created by
           // the App.build method, and use it to set our appbar title.
         ),
-        body: Column(
-          children: <Widget>[
-            Form(
-                key: _registerFormKey,
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: MediaQuery.of(context).size.height / 5,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
-                          colors: [
-                            Colors.red.shade800,
-                            const Color(0xFFf5851f)
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              Form(
+                  key: _registerFormKey,
+                  child: Column(
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height / 5,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            begin: Alignment.topCenter,
+                            end: Alignment.bottomCenter,
+                            colors: [
+                              Colors.red.shade800,
+                              const Color(0xFFf5851f)
+                            ],
+                          ),
+                          borderRadius: const BorderRadius.only(
+                            bottomLeft: Radius.circular(90),
+                          ),
+                        ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.topCenter,
+                              child: Image.asset(
+                                'assets/images/register.jpg',
+                                width: 100,
+                              ),
+                            ),
+                            const Spacer(),
                           ],
                         ),
-                        borderRadius: const BorderRadius.only(
-                          bottomLeft: Radius.circular(90),
+                      ),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 1.6,
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          children: <Widget>[
+                            emailField(context),
+                            passwordField(context),
+                            nameField(context),
+                            birthdateField(context),
+                            const Spacer(),
+                            submitButton(context)
+                          ],
                         ),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Align(
-                            alignment: Alignment.topCenter,
-                            child: Image.asset(
-                              'assets/images/register.jpg',
-                              width: 100,
-                            ),
-                          ),
-                          const Spacer(),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height / 1.6,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        children: <Widget>[
-                          emailField(context),
-                          passwordField(context),
-                          nameField(context),
-                          birthdateField(context),
-                          const Spacer(),
-                          submitButton(context)
-                        ],
-                      ),
-                    )
-                  ],
-                ))
-          ],
+                      )
+                    ],
+                  ))
+            ],
+          ),
         ),
       ),
     );

@@ -47,10 +47,13 @@ class _LoginPageNewState extends State<LoginPageNew> {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      Navigator.of(context).pushReplacement(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(
-          builder: (context) => MainPage(user: user),
+          builder: (context) => MainPage(
+            user: user,
+          ),
         ),
+        (route) => false,
       );
     }
 
@@ -288,12 +291,13 @@ class _LoginPageNewState extends State<LoginPageNew> {
           });
 
           if (user != null) {
-            Navigator.of(context).pushReplacement(
+            Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (context) => MainPage(
                   user: user,
                 ),
               ),
+              (route) => false,
             );
           }
         }

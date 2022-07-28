@@ -1,13 +1,10 @@
-import 'dart:convert';
-
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:my_app/modal/modalUpdate.dart';
 
 class ListaLavori extends StatefulWidget {
-  ListaLavori({Key? key}) : super(key: key);
+  const ListaLavori({Key? key}) : super(key: key);
 
   @override
   State<ListaLavori> createState() => _ListaLavoriState();
@@ -172,12 +169,10 @@ class _ListaLavoriState extends State<ListaLavori> {
                                     onPressed: () {},
                                     icon: const Icon(
                                       Icons.water_drop_rounded,
-                                      size: 20,
                                       color: Color.fromARGB(255, 195, 210, 238),
                                     ),
                                   )
                                 : IconButton(
-                                    iconSize: 20,
                                     onPressed: () {},
                                     icon: const Icon(
                                       Icons.water_drop_rounded,
@@ -195,13 +190,14 @@ class _ListaLavoriState extends State<ListaLavori> {
                             ((snapshot.value! as Map)['garanzia'] == null ||
                                     (snapshot.value! as Map)['garanzia'] ==
                                         false)
-                                ? const Icon(
-                                    Icons.warning_rounded,
-                                    size: 20,
-                                    color: Color.fromARGB(255, 195, 210, 238),
+                                ? IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.warning_rounded,
+                                      color: Color.fromARGB(255, 195, 210, 238),
+                                    ),
                                   )
                                 : IconButton(
-                                    iconSize: 20,
                                     onPressed: () {},
                                     icon: const Icon(
                                       Icons.warning_rounded,
@@ -213,19 +209,19 @@ class _ListaLavoriState extends State<ListaLavori> {
                         ),
                       ),
                       SizedBox(
-                        width: 20,
+                        width: 25,
                         child: Column(
                           children: [
-                            ((snapshot.value! as Map)['garanzia'] == null ||
-                                    (snapshot.value! as Map)['garanzia'] ==
-                                        false)
-                                ? const Icon(
-                                    Icons.image_rounded,
-                                    size: 20,
-                                    color: Color.fromARGB(255, 195, 210, 238),
+                            ((snapshot.value! as Map)['foto'] == null ||
+                                    (snapshot.value! as Map)['foto'] == false)
+                                ? IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.image_rounded,
+                                      color: Color.fromARGB(255, 195, 210, 238),
+                                    ),
                                   )
                                 : IconButton(
-                                    iconSize: 20,
                                     onPressed: () {},
                                     icon: const Icon(
                                       Icons.image_rounded,
