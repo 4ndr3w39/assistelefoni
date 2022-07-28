@@ -1,6 +1,10 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_app/pages/welcomePage.dart';
+import 'package:my_app/utils/storage_service.dart';
 
 import '../utils/fire_auth.dart';
 
@@ -18,21 +22,43 @@ class _ProfilePageState extends State<ProfilePage> {
   bool _isSigningOut = false;
 
   late User _currentUser;
-
+  final Storage storage = Storage();
   @override
   void initState() {
     _currentUser = widget.user;
     super.initState();
   }
 
+  uploadFile() async {
+    final results = await FilePicker.platform.pickFiles(
+      allowMultiple: true,
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'png'],
+    );
+
+    if (results == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('no file selected'),
+        ),
+      );
+      return null;
+    }
+    final path = results.files.single.path!;
+    final fileName = results.files.single.name;
+
+    storage.uploadFile(path, fileName).then((value) => print('Done'));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.amber[800],
         title: const Text('Profilo'),
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -51,31 +77,36 @@ class _ProfilePageState extends State<ProfilePage> {
                   Positioned(
                     bottom: 1,
                     right: 1,
-                    child: Container(
-                      child: const Padding(
-                        padding: EdgeInsets.all(2.0),
-                        child: Icon(Icons.add_a_photo, color: Colors.black),
-                      ),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 3,
-                            color: Colors.white,
-                          ),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(
-                              50,
+                    child: GestureDetector(
+                      onTap: () {
+                        uploadFile();
+                      },
+                      child: Container(
+                        child: const Padding(
+                          padding: EdgeInsets.all(2.0),
+                          child: Icon(Icons.add_a_photo, color: Colors.black),
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(
+                              width: 3,
+                              color: Colors.white,
                             ),
-                          ),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              offset: const Offset(2, 4),
-                              color: Colors.black.withOpacity(
-                                0.3,
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(
+                                50,
                               ),
-                              blurRadius: 3,
                             ),
-                          ]),
+                            color: Colors.white,
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(2, 4),
+                                color: Colors.black.withOpacity(
+                                  0.3,
+                                ),
+                                blurRadius: 3,
+                              ),
+                            ]),
+                      ),
                     ),
                   ),
                 ],
@@ -190,6 +221,26 @@ class _ProfilePageState extends State<ProfilePage> {
                       ),
                     ),
                   ),
+            FutureBuilder(
+                future: storage.downloadURL('IMG_0002.JPG'),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.hasData) {
+                    return SizedBox(
+                        width: 300,
+                        height: 250,
+                        child: Image.network(
+                          snapshot.data!,
+                          fit: BoxFit.cover,
+                        ));
+                  }
+                  if (snapshot.connectionState == ConnectionState.waiting ||
+                      !snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  }
+                  return Container();
+                })
           ],
         ),
       ),

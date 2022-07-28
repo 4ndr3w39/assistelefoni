@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 
 class FireAuth {
   // For registering a new user
-  static Future<User?> registerUsingEmailPassword({
-    required String name,
-    required String email,
-    required String password,
-  }) async {
+  static Future<User?> registerUsingEmailPassword(
+      {required String name,
+      required String email,
+      required String password,
+      context}) async {
     FirebaseAuth auth = FirebaseAuth.instance;
     User? user;
 
@@ -24,8 +24,22 @@ class FireAuth {
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         print('The password provided is too weak.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('La password è troppo debole'),
+            backgroundColor: Colors.red,
+          ),
+        );
       } else if (e.code == 'email-already-in-use') {
         print('The account already exists for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('Esiste già un utente con questa email'),
+            backgroundColor: Colors.red,
+          ),
+        );
       }
     } catch (e) {
       print(e);
@@ -48,9 +62,14 @@ class FireAuth {
       user = userCredential.user;
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
-        print('No user found for that email.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            duration: Duration(seconds: 1),
+            content: Text('Nessun utente trovato, verifica mail'),
+            backgroundColor: Colors.red,
+          ),
+        );
       } else if (e.code == 'wrong-password') {
-        print('wrong-password');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             duration: Duration(seconds: 1),

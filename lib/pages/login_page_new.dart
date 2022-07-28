@@ -14,13 +14,11 @@ class LoginPageNew extends StatefulWidget {
 }
 
 class _LoginPageNewState extends State<LoginPageNew> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKeyLogin = GlobalKey<FormState>();
   final _formKeyResetPassword = GlobalKey<FormState>();
-
   final _emailTextController = TextEditingController();
   final _emailTextControllerResend = TextEditingController();
   final _passwordTextController = TextEditingController();
-
   final _focusEmail = FocusNode();
   final _focusEmailResend = FocusNode();
   final _focusPassword = FocusNode();
@@ -29,12 +27,12 @@ class _LoginPageNewState extends State<LoginPageNew> {
 
   Future resetPassword(context) async {
     try {
-      await FirebaseAuth.instance.sendPasswordResetEmail(
-          email: _emailTextControllerResend.text.trim());
+      await FirebaseAuth.instance
+          .sendPasswordResetEmail(email: _emailTextController.text.trim());
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Email Inviata'),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
         ),
       );
       Navigator.of(context).pop();
@@ -73,13 +71,14 @@ class _LoginPageNewState extends State<LoginPageNew> {
           key: _formKeyResetPassword,
           child: AlertDialog(
             insetPadding:
-                const EdgeInsets.symmetric(vertical: 200, horizontal: 30),
+                const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
             title: const Text('Reimposta password'),
             content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 TextFormField(
-                  controller: _emailTextControllerResend,
-                  focusNode: _focusEmailResend,
+                  controller: _emailTextController,
+                  // focusNode: _focusEmailResend,
                   validator: (value) => Validator.validateEmail(
                     email: value,
                   ),
@@ -119,17 +118,15 @@ class _LoginPageNewState extends State<LoginPageNew> {
           backgroundColor: Colors.amber[800],
         ),
         resizeToAvoidBottomInset: true,
-        body: FutureBuilder(
-          future: _initializeFirebase(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return Padding(
-                padding: EdgeInsets.only(
-                    bottom: MediaQuery.of(context).viewInsets.bottom),
-                child: Column(
+        body: SingleChildScrollView(
+          child: FutureBuilder(
+            future: _initializeFirebase(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                return Column(
                   children: [
                     Form(
-                      key: _formKey,
+                      key: _formKeyLogin,
                       child: Column(
                         children: <Widget>[
                           Container(
@@ -208,13 +205,13 @@ class _LoginPageNewState extends State<LoginPageNew> {
                       ),
                     )
                   ],
-                ),
+                );
+              }
+              return const Center(
+                child: CircularProgressIndicator(),
               );
-            }
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          },
+            },
+          ),
         ),
       ),
     );
@@ -241,6 +238,7 @@ class _LoginPageNewState extends State<LoginPageNew> {
     return TextFormField(
       controller: _passwordTextController,
       focusNode: _focusPassword,
+      obscureText: true,
       validator: (value) => Validator.validatePassword(
         password: value,
       ),
@@ -275,7 +273,7 @@ class _LoginPageNewState extends State<LoginPageNew> {
         _focusEmail.unfocus();
         _focusPassword.unfocus();
 
-        if (_formKey.currentState!.validate()) {
+        if (_formKeyLogin.currentState!.validate()) {
           setState(() {
             _isProcessing = true;
           });

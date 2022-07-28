@@ -276,22 +276,6 @@ class _ListaLavoriState extends State<ListaLavori> {
                             },
                           ),
                         ),
-                        // todo view details
-                        // SizedBox(
-                        //   height: 15,
-                        //   child: IconButton(
-                        //     padding: EdgeInsets.zero,
-                        //     icon: const Icon(
-                        //       Icons.perm_device_info_outlined,
-                        //       color: Color.fromARGB(255, 255, 143, 0),
-                        //       size: 20,
-                        //     ),
-                        //     onPressed: () {
-                        //       updateDatajobs((snapshot.value! as Map)['status'],
-                        //           context, snapshot.key, ref);
-                        //     },
-                        //   ),
-                        // ),
                       ],
                     )),
               ],

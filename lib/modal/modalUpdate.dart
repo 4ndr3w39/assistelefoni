@@ -8,36 +8,41 @@ Future<void> updateDatajobs(
   return showDialog(
     context: context,
     builder: (BuildContext context) {
-      return AlertDialog(
-        insetPadding: const EdgeInsets.symmetric(vertical: 200, horizontal: 30),
-        title: const Text('Prendi in carico assistenza'),
-        content: Column(
-          children: <Widget>[
-            TextFormField(
-              controller: statusController,
-              textCapitalization: TextCapitalization.characters,
-              decoration: const InputDecoration(
-                border: UnderlineInputBorder(),
-                labelText: "Status",
-              ),
-            )
+      return SizedBox(
+        height: 150,
+        child: AlertDialog(
+          insetPadding:
+              const EdgeInsets.symmetric(vertical: 50, horizontal: 30),
+          title: const Text('Prendi in carico assistenza'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              TextFormField(
+                controller: statusController,
+                textCapitalization: TextCapitalization.characters,
+                decoration: const InputDecoration(
+                  border: UnderlineInputBorder(),
+                  labelText: "Status",
+                ),
+              )
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                updateData(statusController.text, key, ref);
+                Navigator.of(context).pop();
+              },
+              child: const Text('Aggiorna'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('Annulla'),
+            ),
           ],
         ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              updateData(statusController.text, key, ref);
-              Navigator.of(context).pop();
-            },
-            child: const Text('Aggiorna'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: const Text('Annulla'),
-          ),
-        ],
       );
     },
   );

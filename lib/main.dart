@@ -15,6 +15,7 @@ import 'firebase_options.dart';
 import 'package:my_app/firebase_options.dart';
 
 Future<void> main() async {
+  await Firebase.initializeApp();
   WidgetsFlutterBinding.ensureInitialized();
   bool isAuthenticated = await AuthService.authenticateUser();
   await Firebase.initializeApp(
