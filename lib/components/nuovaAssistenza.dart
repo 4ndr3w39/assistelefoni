@@ -495,7 +495,6 @@ class _NuovaAssistenzaState extends State<NuovaAssistenza> {
                                         "data": getDateToday(),
                                       });
                                     }
-
                                     Navigator.of(context).pop();
                                   } on SocketException catch (_) {
                                     ScaffoldMessenger.of(context).showSnackBar(

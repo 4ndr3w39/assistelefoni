@@ -180,11 +180,6 @@ class _LoginPageNewState extends State<LoginPageNew> {
                                       Padding(
                                         padding: const EdgeInsets.only(
                                             top: 30, right: 20),
-                                        // child: ElevatedButton(
-                                        //   onPressed: openModalResend,
-                                        //   child:
-                                        //       const Text('Password dimenticata?'),
-                                        // ),
                                         child: GestureDetector(
                                           onTap: openModalResend,
                                           child: const Text(
